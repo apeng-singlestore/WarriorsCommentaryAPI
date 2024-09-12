@@ -21,7 +21,6 @@
     "deep-chat-react": "^2.0.1",
     "groq": "^3.57.2",
     "groq-sdk": "^0.7.0",
-    "kafkajs": "^2.2.4",
     "navigator": "^1.0.1",
     "next": "^13.4.4",
     "openai": "^4.60.0",
