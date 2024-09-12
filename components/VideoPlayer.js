@@ -12,8 +12,7 @@ export default function VideoPlayer({ videoSrc }) {
     let lastCaptureTime = 0;
 
     const captureFrame = (time) => {
-      if (time - lastCaptureTime >= 2000) {
-        // Capture every 5 seconds
+      if (time - lastCaptureTime >= 5000) { // Capture every 5 seconds
         if (video.readyState >= video.HAVE_CURRENT_DATA) {
           const canvas = document.createElement("canvas");
           canvas.width = video.videoWidth;
@@ -35,6 +34,7 @@ export default function VideoPlayer({ videoSrc }) {
               imageData,
               width: canvas.width,
               height: canvas.height,
+              videoTimestamp: video.currentTime,
             }),
           })
             .then((response) => response.json())
@@ -42,7 +42,7 @@ export default function VideoPlayer({ videoSrc }) {
               console.log("Commentary generated:", data);
               setCommentary((prevCommentary) => [
                 ...prevCommentary,
-                { ...data, type: "ai" },
+                { ...data, type: "ai", videoTimestamp: video.currentTime },
               ]);
             })
             .catch((error) => {
@@ -90,6 +90,7 @@ export default function VideoPlayer({ videoSrc }) {
       timestamp: new Date().toISOString(),
       text: message,
       type: "user",
+      videoTimestamp: videoRef.current.currentTime,
     };
     setCommentary((prevCommentary) => [...prevCommentary, userComment]);
   };
