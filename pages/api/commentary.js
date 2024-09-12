@@ -7,15 +7,15 @@ export default async function handler(req, res) {
 
   if (req.method === "POST") {
     try {
-      const { imageData, width, height, videoTimestamp } = req.body;
-      console.log("Received image data:", width, "x", height, "at timestamp:", videoTimestamp);
+      const { imageData, width, height } = req.body;
+      console.log("Received image data:", width, "x", height);
 
       if (!imageData) {
         throw new Error("No image data provided");
       }
 
       console.log("Generating commentary...");
-      const commentary = await generateCommentary(imageData, width, height, videoTimestamp);
+      const commentary = await generateCommentary(imageData, width, height);
       console.log("Commentary generated:", commentary);
 
       if (commentary.error) {
