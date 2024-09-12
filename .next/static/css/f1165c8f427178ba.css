@@ -1,0 +1,1 @@
+@tailwind base;@tailwind components;@tailwind utilities;.video-container,body,button,h2,input{@apply bg-black border-4 border-gray-900}
