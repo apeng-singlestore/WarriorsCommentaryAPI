@@ -1,10 +1,25 @@
 import { generateCommentary } from "../../lib/commentaryGenerator";
 import { GROQ_API_KEY } from "../../lib/config";
 import { createTableIfNotExists } from '../../lib/singleStoreClient';
+import { initializeKafka } from '../../lib/kafkaClient';
+
+let kafkaInitialized = false;
 
 export default async function handler(req, res) {
   console.log("Commentary API handler called");
   console.log("GROQ_API_KEY is set:", !!GROQ_API_KEY);
+
+  // Initialize Kafka if not already done
+  if (!kafkaInitialized) {
+    try {
+      await initializeKafka();
+      kafkaInitialized = true;
+      console.log("Kafka initialized successfully");
+    } catch (error) {
+      console.error("Error initializing Kafka:", error);
+      // Continue with the request even if Kafka initialization fails
+    }
+  }
 
   // Create the table if it doesn't exist
   await createTableIfNotExists();
