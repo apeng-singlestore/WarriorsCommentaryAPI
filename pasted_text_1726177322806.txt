@@ -1,0 +1,224 @@
+skip to:contentpackage searchsign in
+❤
+Pro
+Teams
+Pricing
+Documentation
+npm
+Search packages
+Search
+@singlestore/client
+TypeScript icon, indicating that this package has built-in type declarations
+0.0.35 • Public • Published 7 days ago
+SingleStore Client
+The SingleStore Client is a package designed for interacting with the SingleStore API in Node.js environments.
+
+Table of Contents
+Installation
+Usage Examples
+Create an Instance
+Connect to a Workspace
+Create a Database
+Use a Database
+Create a Table
+Insert Values
+Find Values
+Find Values by a Condition
+Update Values by a Condition
+Add AI Functionality
+Perform a Vector Search
+Create a Chat Completion Stream
+Advanced Usage
+Installation
+To install the @singlestore/client package, run the following command:
+
+npm install @singlestore/client
+Usage Examples
+Create an Instance
+Instantiate the SingleStoreClient to interact with the SingleStore.
+
+import { SingleStoreClient } from "@singlestore/client";
+
+const client = new SingleStoreClient();
+Connect to a Workspace
+Connect to a specific workspace using your workspace credentials.
+
+const workspace = client.workspace({
+  host: "<DATABASE_HOST>",
+  user: "<DATABASE_USER>",
+  password: "<DATABASE_PASSWORD>",
+});
+Create a Database
+Create a new database within the connected workspace.
+
+const database = await workspace.createDatabase({ name: "my_database" });
+Use a Database
+Select and use an existing database.
+
+const database = await workspace.database("my_database");
+Create a Table
+Create a table within the selected database with specified columns and attributes.
+
+const usersTable = await database.createTable({
+  name: "users",
+  columns: {
+    id: { type: "BIGINT", autoIncrement: true, primaryKey: true },
+    name: { type: "VARCHAR(32)" },
+    role: { type: "VARCHAR(32)" },
+  },
+});
+Insert Values
+Insert multiple records into a table.
+
+await usersTable.insert([
+  { name: "User 1", role: "admin" },
+  { name: "User 2", role: "visitor" },
+]);
+Find Values
+Retrieve all records from a table.
+
+const users = await usersTable.find();
+Find Values by a Condition
+Retrieve records that match specific conditions.
+
+const admins = await usersTable.find({ where: { role: "admin" } });
+Update Values by a Condition
+Update records that meet certain conditions.
+
+await usersTable.update({ role: "admin" }, { name: "User 2" });
+Add AI Functionality
+Integrate AI capabilities using the SingleStore AI package.
+
+import { AI } from "@singlestore/ai";
+import { SingleStoreClient } from "@singlestore/client";
+
+const ai = new AI({ openAIApiKey: "<OPENAI_API_KEY>" });
+const client = new SingleStoreClient({ ai });
+Perform a Vector Search
+Execute a vector search on a table to find relevant records.
+
+const results = await usersTable.vectorSearch(
+  { prompt: "A 4k monitor", vectorColumn: "description_v" },
+  { select: ["name", "description", "price"], limit: 1 },
+);
+Create a Chat Completion Stream
+Generate a chat completion or stream based on prompt and vector search results.
+
+const stream = await usersTable.createChatCompletion(
+  { prompt: "Find a 4k monitor", vectorColumn: "description_v", stream: true },
+  { select: ["name", "description", "price"], limit: 1 },
+);
+
+const onChunk: OnChatCompletionChunk = (chunk) => console.log(chunk);
+
+const chatCompletion = await ai.chatCompletions.handleStream(stream, onChunk);
+console.log(chatCompletion);
+Advanced Usage
+A more complex example demonstrating advanced queries and table joins.
+
+interface StoreDatabase {
+  name: "store_database";
+  tables: {
+    products: {
+      name: "products";
+      columns: {
+        id: number;
+        name: string;
+        description: string;
+        price: number;
+        category_id: number;
+        description_v: string;
+      };
+    };
+    categories: {
+      name: "categories";
+      columns: {
+        id: number;
+        name: string;
+      };
+    };
+  };
+}
+
+const client = new SingleStoreClient({ ai });
+
+const workspace = client.workspace<{
+  databases: { store_database: StoreDatabase };
+}>({
+  host: "<DATABASE_HOST>",
+  user: "<DATABASE_USER>",
+  password: "<DATABASE_PASSWORD>",
+});
+
+const database = workspace.database("store_database");
+
+const products = await database.table("products").find({
+  select: ["id", "name", "description", "price", "category.name"],
+  join: [
+    {
+      table: "categories",
+      as: "category",
+      on: ["category_id", "=", "id"],
+    },
+  ],
+  where: {
+    "category.id": 1,
+    "price": { gte: 500 },
+  },
+  orderBy: { price: "desc" },
+  limit: 5,
+});
+
+console.log(products);
+Readme
+Keywords
+singlestore
+Package Sidebar
+Install
+npm i @singlestore/client
+
+Repository
+github.com/singlestore-labs/singlestore
+
+Homepage
+github.com/singlestore-labs/singlestore
+
+Weekly Downloads
+180
+
+Version
+0.0.35
+
+License
+Apache-2.0
+
+Unpacked Size
+199 kB
+
+Total Files
+8
+
+Last publish
+7 days ago
+
+Collaborators
+lneves_singlestore
+ydemenskyi
+martaimv
+Try on RunKit
+Report malware
+Footer
+Support
+Help
+Advisories
+Status
+Contact npm
+Company
+About
+Blog
+Press
+Terms & Policies
+Policies
+Terms of Use
+Code of Conduct
+Privacy
