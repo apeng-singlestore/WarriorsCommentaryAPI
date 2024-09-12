@@ -1,13 +1,9 @@
 import { generateCommentary } from "../../lib/commentaryGenerator";
 import { GROQ_API_KEY } from "../../lib/config";
-import { createTableIfNotExists } from '../../lib/singleStoreClient';
 
 export default async function handler(req, res) {
   console.log("Commentary API handler called");
   console.log("GROQ_API_KEY is set:", !!GROQ_API_KEY);
-
-  // Create the table if it doesn't exist
-  await createTableIfNotExists();
 
   if (req.method === "POST") {
     try {
