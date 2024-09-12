@@ -1,5 +1,6 @@
 import { generateCommentary } from "../../lib/commentaryGenerator";
 import { GROQ_API_KEY } from "../../lib/config";
+import { getStoredCommentary } from "../../lib/singleStoreClient";
 
 export default async function handler(req, res) {
   console.log("Commentary API handler called");
@@ -15,18 +16,25 @@ export default async function handler(req, res) {
       }
 
       console.log("Generating commentary...");
-      const commentary = await generateCommentary(imageData, width, height);
-      console.log("Commentary generated:", commentary);
+      const newCommentary = await generateCommentary(imageData, width, height);
+      console.log("New commentary generated:", newCommentary);
 
-      if (commentary.error) {
-        throw new Error(commentary.error);
+      if (newCommentary.error) {
+        throw new Error(newCommentary.error);
       }
 
-      res.status(200).json(commentary);
+      // Retrieve stored commentary
+      const storedCommentary = await getStoredCommentary(5); // Get last 5 stored commentaries
+      console.log("Retrieved stored commentary:", storedCommentary);
+
+      res.status(200).json({
+        newCommentary,
+        storedCommentary
+      });
     } catch (error) {
-      console.error("Error in generating commentary:", error);
+      console.error("Error in generating or retrieving commentary:", error);
       res.status(500).json({
-        text: `Error generating commentary: ${error.message}`,
+        text: `Error: ${error.message}`,
         error: true,
       });
     }

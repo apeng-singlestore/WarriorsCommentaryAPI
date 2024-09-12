@@ -19,7 +19,7 @@ export default function CommentarySidebar({ commentary, onSendMessage }) {
   };
 
   return (
-    <div className="bg-gray-100 h-full flex flex-col">
+    <div className="bg-gray-100 h-full flex flex-col commentary">
       <div className="flex-grow overflow-y-auto p-4" ref={chatBoxRef}>
         <h2 className="text-2xl font-bold mb-4">Live Chat</h2>
         <div className="space-y-4">
