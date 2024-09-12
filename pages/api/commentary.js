@@ -1,26 +1,36 @@
-import { generateCommentary } from '../../lib/commentaryGenerator';
+import { generateCommentary } from "../../lib/commentaryGenerator";
+import { GROQ_API_KEY } from "../../lib/config";
 
-export default function handler(req, res) {
-  res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive',
-  });
+export default async function handler(req, res) {
+  console.log("Commentary API handler called");
+  console.log("GROQ_API_KEY is set:", !!GROQ_API_KEY);
 
-  const sendCommentary = () => {
-    const commentary = generateCommentary();
-    res.write(`data: ${JSON.stringify(commentary)}\n\n`);
-  };
+  if (req.method === "POST") {
+    try {
+      const { imageData, width, height } = req.body;
+      console.log("Received image data:", width, "x", height);
 
-  // Send initial commentary
-  sendCommentary();
+      if (!imageData) {
+        throw new Error("No image data provided");
+      }
 
-  // Send commentary every 5 seconds
-  const intervalId = setInterval(sendCommentary, 5000);
+      console.log("Generating commentary...");
+      const commentary = await generateCommentary(imageData, width, height);
+      console.log("Commentary generated:", commentary);
 
-  // Clean up on close
-  res.on('close', () => {
-    clearInterval(intervalId);
-    res.end();
-  });
+      if (commentary.error) {
+        throw new Error(commentary.error);
+      }
+
+      res.status(200).json(commentary);
+    } catch (error) {
+      console.error("Error in generating commentary:", error);
+      res.status(500).json({
+        text: `Error generating commentary: ${error.message}`,
+        error: true,
+      });
+    }
+  } else {
+    res.status(405).json({ error: "Method not allowed" });
+  }
 }

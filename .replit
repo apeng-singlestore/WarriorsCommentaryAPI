@@ -1,4 +1,5 @@
 modules = ["python-3.11", "nodejs-20"]
+run = "npm run dev"
 
 [nix]
 channel = "stable-24_05"
@@ -18,6 +19,14 @@ args = "Start Next.js app"
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Next.js Dev Server"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build Next.js App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start Next.js App"
 
 [[workflows.workflow]]
 name = "Start Next.js app"
@@ -41,7 +50,30 @@ agentRequireRestartOnSave = false
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm run dev"
-waitForPort = 3000
+waitForPort = 3001
+
+[[workflows.workflow]]
+name = "Build Next.js App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run build"
+
+[[workflows.workflow]]
+name = "Start Next.js App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm start"
+waitForPort = 3001
 
 [deployment]
 run = ["sh", "-c", "npm run dev"]

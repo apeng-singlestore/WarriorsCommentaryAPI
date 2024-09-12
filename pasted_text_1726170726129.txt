@@ -1,0 +1,538 @@
+---
+sidebar_position: 2
+---
+
+# Connect
+
+<h2>How to connect to an API</h2>
+
+You can connect to any API by defining their details inside the [`connect`](/docs/connect#connect-1) property. The target endpoint will need to be able to accept
+and respond using the formats described below.
+
+<a href="https://youtu.be/NuRhPeqDCus">
+  <img src={YoutubeLogo} className={'youtube-icon'} />
+  Video demo
+</a>
+
+<h3>Request message</h3>
+
+The outgoing Deep Chat request body is encapsulated in one of the following formats:
+
+- When sending **text** based messages only, the request body will have the following JSON type: <br />
+  \{[`messages: MessageContent[]`](/docs/messages/#MessageContent)\} <br />
+
+- When sending messages that contain **files**, the request body is going to be serialized inside a [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) type
+  where files are set inside an array property called _"files"_ and each text message is stored inside a _"message\{index\}"_ property with a corresponding index: <br />
+  \{`files: File[]`, [`message1: MessageContent`](/docs/messages/#MessageContent), [`message2: MessageContent`](/docs/messages/#MessageContent)... \} <br />
+
+<h3>Response message</h3>
+
+Response from the target server needs to use the [`Response`](#Response) JSON type.
+
+:::tip
+If you don't want / can't change the target server to handle the required object types, use the [`interceptor`](/docs/interceptors) properties
+to augment the transferred objects or the [`handler`](#Handler) function to control the request code.
+:::
+
+<h2>Connection properties</h2>
+
+import ComponentContainer from '@site/src/components/table/componentContainer';
+import DeepChatBrowser from '@site/src/components/table/deepChatBrowser';
+import LineBreak from '@site/src/components/markdown/lineBreak';
+import WebSocket from '/img/update-websocket-message.gif';
+import BrowserOnly from '@docusaurus/BrowserOnly';
+import YoutubeLogo from '/img/youtube.png';
+import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs';
+
+<BrowserOnly>{() => require('@site/src/components/nav/autoNavToggle').readdAutoNavShadowToggle()}</BrowserOnly>
+
+### `connect`
+
+- Type: \{<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `url?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `method?: string`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `headers?: {[string]: string}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; `additionalBodyProps?: {[string]: any}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`credentials?: string`](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`websocket?: Websocket`](#Websocket), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`stream?: Stream`](#Stream), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; [`handler?: Handler`](#Handler) <br />
+  \}
+
+- Default: _\{ method: "POST", credentials: "same-origin" \}_
+
+Settings for the outgoing API requests. This object MUST have `url` or `handler` property defined. <br />
+`additionalBodyProps` is used to add additional key value properties to the outgoing message body. <br />
+`credentials` is used to configure whether the outgoing request should contain cookies. [More info](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials). <br />
+`websocket` is used to establish a websocket connection instead of sending REST requests.
+
+<a href="https://youtu.be/NuRhPeqDCus?si=B98OGweTBwiMnMzb&t=40">
+  <img src={YoutubeLogo} className={'youtube-icon'} />
+  Video demo
+</a>
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    connect={{
+      url: 'https://customapi.com/message',
+      method: 'POST',
+      headers: {customName: 'customHeaderValue'},
+      additionalBodyProps: {customBodyField: 'customBodyValue'},
+    }}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  connect='{
+    "url": "https://customapi.com/message",
+    "method": "POST",
+    "headers": {"customName": "customHeaderValue"},
+    "additionalBodyProps": {"customBodyField": "customBodyValue"}
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  connect='{
+    "url": "https://customapi.com/message",
+    "method": "POST",
+    "headers": {"customName": "customHeaderValue"},
+    "additionalBodyProps": {"customBodyField": "customBodyValue"}
+  }'
+  style="border-radius: 8px"
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `requestBodyLimits` {#requestBodyLimits}
+
+- Type: \{`maxMessages?: number`, `totalMessagesMaxCharLength?: number`\}
+
+Used to limit the content that is going to be included in the outgoing requests. <br />
+`maxMessages` is the maximum number of messages counting from the most recent one. If this is set to a number higher than _0_ such as _1_ - the outgoing request will only include the new user message,
+if it is _2_ - it will also include the message before the latest one (from AI or the user) and so on... If the number is _0_ or below - the request will include all messages in the chat. If
+it is _undefined_, the request will only include the input text/files. <br />
+`totalMessagesMaxCharLength` is the total maximum number of text characters sent in the request counting from the most recent message. <br />
+These limits do not include the [`introMessage`](/docs/messages#introMessage).
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    introMessage={{text: 'Observe the data that is going to be sent below.'}}
+    requestBodyLimits={{
+      totalMessagesMaxCharLength: 20,
+      maxMessages: 2,
+    }}
+    demo={true}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat
+  requestBodyLimits='{
+    "totalMessagesMaxCharLength": 20,
+    "maxMessages": 2
+  }'
+></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  requestBodyLimits='{
+    "totalMessagesMaxCharLength": 20,
+    "maxMessages": 2
+  }'
+  style="border-radius: 8px"
+  demo="true"
+  introMessage='{"text": Observe the data that is going to be sent below."}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+## Types
+
+Types shared with other component properties:
+
+### `Response` {#Response}
+
+- Type: \{[`MessageContent`](/docs/messages/#MessageContent), `error?: string`, `overwrite?: boolean`\}
+
+Object containing response information from the target service. It has the same properties as [`MessageContent`](/docs/messages/#MessageContent) with additional optional `error` and
+`overwrite` properties: <br />
+`text` is the content for a text message. <br />
+`files` is an array that encapsulates details on the response files. <br />
+`html` is a string that defines the markup for [custom elements](/docs/messages/HTML). It must describe full elements. <br />
+`error` describes information about a server error. If the _displayServiceErrorMessages_ property in [`errorMessages`](/docs/messages#errorMessages)
+is set to _true_, the same message will be displayed in the chat's error bubble. <br />
+`overwrite` replaces last message from the same role or creates a new one if not found. [Status bubble](#status-bubble-example) example. <br />
+
+#### Examples:
+
+Simple - `{text: "Simple response"}` <br />
+Mixed - `{files: [{name: "file.txt"}], html: "<div>Custom Element</div>"}` <br />
+Custom role - `{role: "bob", text: "Message from bob"}` <br />
+Error - `{error: "Service Error"}` <br />
+Overwrite - `{text: "New text", overwrite: true}` <br />
+
+<LineBreak></LineBreak>
+
+### `Websocket` {#Websocket}
+
+- Type: `boolean` | `string` | `string[]`
+
+This is used to establish a websocket connection with your server. Enable it by defining the `websocket` property inside the [`connect`](#connect-1) object
+as a `boolean` _true_ or as a string [connection protocol](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications#creating_a_websocket_object)
+(or an array of strings for multiple protocols). <br />
+It is important to note that exchanged messages must be Stringified JSONs where Deep Chat will send its messages using the [Request message](connect) format
+and the server must send its messages using the [`Response`](#Response) format. Example messages: <br />
+Deep Chat message: <br />
+`'{"messages":[{"role":"user","text":"Message from Deep Chat"}]}'` <br />
+Server message: <br />
+`'{"text":"Message from the server"}'`
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    connect={{
+      url: 'wss://customapi.com',
+      websocket: true,
+    }}
+    style={{borderRadius: '8px'}}
+    introMessage='{"text": Chat will attempt to establish a websocket connection as soon as the component loads up."}'
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat connect='{"url": "ws://customapi.com", "websocket": true}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  connect='{"url": "ws://customapi.com", "websocket": true}'
+  style="border-radius: 8px"
+  introMessage='{"text": Chat will attempt to establish a websocket connection as soon as the component loads up."}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::tip
+Check the [websocket server template](https://github.com/OvidijusParsiunas/deep-chat/tree/main/example-servers/node/websockets) to help you get started.
+:::
+
+<LineBreak></LineBreak>
+
+#### Status Bubble Example {#status-bubble-example}
+
+<img
+  src={WebSocket}
+  style={{marginLeft: 'auto', marginRight: 'auto', display: 'flex', height: '380px', marginBottom: '5px'}}
+/>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```text
+Messages from the server:
+1: {text: "Downloading...", overwrite: true}
+2: {text: "Loading...", overwrite: true}
+3: {text: "Processing...", overwrite: true}
+4: {text: "Ready...", overwrite: true}
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```text
+Component configuration:
+<deep-chat connect='{"url": "ws://customapi.com", "websocket": true}'></deep-chat>
+
+Messages from the server:
+1: {text: "Downloading...", overwrite: true}
+2: {text: "Loading...", overwrite: true}
+3: {text: "Processing...", overwrite: true}
+4: {text: "Ready...", overwrite: true}
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+### `Stream` {#Stream}
+
+- Type: `boolean` | \{`simulation?: boolean | number | string`\}
+
+Used to stream responses from the target service. <br />
+By setting _true_ - the chat will stream incoming [`server-sent events`](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events) from
+the server. See [`example`](https://deepchat.dev/examples/servers) server code. <br />
+The responses are expected to contain partial text, however you can use [`overwrite`](#Response) to overwrite each one. <br />
+You can alternatively use the `simulation` object property to facilitate a <b>stream-like</b> experience for any other connection type where the received content wil be
+gradually populated in the message bubble. You can control the millisecond interim of each word's appearance by assigning it a number with the default being _6_.
+A string value is used to act like an _end-phrase_ for individual websocket messages that act like a stream. <br />
+
+#### Stream Service Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    connect={{stream: true}}
+    demo={true}
+    introMessage={{text: 'The response message bubble will be populated gradually with text events.'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat connect='{"stream": true}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  connect='{"stream": true}'
+  demo="true"
+  style="border-radius: 8px"
+  introMessage='{"text": The response message bubble will be populated gradually with text events."}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+#### Regular Service Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    style={{borderRadius: '8px'}}
+    connect={{stream: {simulation: 6}}}
+    demo={true}
+    introMessage={{text: 'The response message bubble will be populated gradually with text events.'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Sample code">
+
+```html
+<deep-chat connect='{"stream": {"simulation": 6}}'></deep-chat>
+```
+
+</TabItem>
+<TabItem value="py" label="Full code">
+
+```html
+<!-- This example is for Vanilla JS and should be tailored to your framework (see Examples) -->
+
+<deep-chat
+  connect='{"stream": {"simulation": 6}}'
+  demo="true"
+  style="border-radius: 8px"
+  introMessage='{"text": The response message bubble will be populated gradually with text events."}'
+></deep-chat>
+```
+
+</TabItem>
+</Tabs>
+
+<LineBreak></LineBreak>
+
+:::note
+`stream` can be used in [`connect`](connect) by itself when [`demo`](https://deepchat.dev/docs/demo) is defined.
+:::
+
+<LineBreak></LineBreak>
+
+### `Handler` {#Handler}
+
+- Type: (`body: any`, [`signals: Signals`](#Signals)) => `void`
+
+This function gives developers full control for making server requests using their own code. <br /> It is invoked when the user
+attempts to send a message and consists of two core arguments: <br />
+`body` is an object that contains the outgoing message details and uses the [`Request message`](/docs/connect) type. <br />
+`signals` is a map of functions which are used to notify Deep Chat on the status of the request and its result. The available
+signal functions differ based on the type of connection you are establishing. See examples below.
+
+<a href="https://youtu.be/orRVFA5AWfU">
+  <img src={YoutubeLogo} className={'youtube-icon'} />
+  Video demo
+</a>
+
+#### Example
+
+<ComponentContainer>
+  <DeepChatBrowser
+    connect={{
+      handler: (body, signals) => {
+        signals.onResponse({text: 'Handler response'});
+      },
+    }}
+    style={{borderRadius: '8px'}}
+  ></DeepChatBrowser>
+</ComponentContainer>
+
+<Tabs>
+<TabItem value="js" label="Basic">
+
+```js
+chatElementRef.connect = {
+  handler: (body, signals) => {
+    try {
+      fetch('custom-url).then((response) => {
+        signals.onResponse({text: 'Handler response'}); // displays the response text message
+      })
+    } catch (e) {
+      signals.onResponse({error: 'Error'}); // displays an error message
+    }
+  }
+};
+```
+
+</TabItem>
+<TabItem value="py" label="Stream">
+
+```js
+chatElementRef.stream = true;
+chatElementRef.connect = {
+  handler: (body, signals) => {
+    try {
+      // this is PSEUDO CODE for creating a stream
+      fetchEventSource('custom-url', {
+        async onopen(response) {
+          if (response.ok) {
+            signals.onOpen(); // stops the loading bubble
+          } else {
+            signals.onResponse({error: 'error'}); // displays an error message
+          }
+        },
+        onmessage(message) {
+          signals.onResponse({text: message}); // adds text into the message bubble
+        },
+        onerror(message) {
+          signals.onResponse({error: message}); // displays an error message
+        },
+        onclose() {
+          signals.onClose(); // The stop button will be changed back to submit button
+        },
+      });
+      // triggered when the user clicks the stop button
+      signals.stopClicked.listener = () => {
+        // logic to stop your stream, such as creating an abortController
+      };
+    } catch (e) {
+      signals.onResponse({error: 'error'}); // displays an error message
+    }
+  },
+};
+```
+
+</TabItem>
+<TabItem value="ts" label="Websocket">
+
+```js
+// this handler is invoked when the component is loaded
+chatElementRef.connect = {
+  websocket: true,
+  handler: (_, signals) => {
+    try {
+      const websocket = new WebSocket('custom-url');
+      websocket.onopen = () => {
+        signals.onOpen(); // enables the user to send messages
+      };
+      websocket.onmessage = (message) => {
+        const response = JSON.parse(message.data);
+        signals.onResponse(response); // displays a text message from the server
+      };
+      websocket.onclose = () => {
+        signals.onClose(); // stops the user from sending messages
+      };
+      websocket.onerror = () => {
+        // 'Connection error' is a special string that will also display in Deep Chat
+        signals.onResponse({error: 'Connection error'});
+      };
+      // triggered when the user sends a message
+      signals.newUserMessage.listener = (body) => {
+        websocket.send(JSON.stringify(body));
+      };
+    } catch (e) {
+      signals.onResponse({error: 'error'}); // displays an error message
+      signals.onClose(); // stops the user from sending messages
+    }
+  },
+};
+```
+
+</TabItem>
+</Tabs>
+
+:::info
+Error handling must be done within the `handler` function.
+:::
+
+<LineBreak></LineBreak>
+
+#### `Signals` {#Signals}
+
+- Type: \{ <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;[`onResponse: (response: Response) => void`](#Response), <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`onOpen: () => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`onClose: () => void`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`stopClicked: {listener: () => void}`, <br />
+  &nbsp;&nbsp;&nbsp;&nbsp;`newUserMessage: {listener: (body: any) => void}` <br />
+  \}
+
+Object containing functions that are used to notify the Deep Chat component about the status of the current request.
+The `stopClicked` and `newUserMessage` functions are triggered by Deep Chat itself and contain `listener` properties
+which can be assigned with custom functions to listen for when they are called (see the examples above).
