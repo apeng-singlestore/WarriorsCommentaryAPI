@@ -3,21 +3,5 @@
 @import 'tailwindcss/utilities';
 
 body {
-  @apply bg-black;
-}
-
-h2 {
-  @apply text-white;
-}
-
-button {
-  @apply bg-purple-600 hover:bg-purple-700;
-}
-
-input {
-  @apply border-gray-600;
-}
-
-.video-container {
-  @apply bg-black border-4 border-gray-900;
+  @apply bg-gray-50;
 }
