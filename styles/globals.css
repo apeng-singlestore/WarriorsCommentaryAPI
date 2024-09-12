@@ -5,14 +5,3 @@
 body {
   @apply bg-gray-50;
 }
-
-.videoplayer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.commentary {
-  flex-grow: 1;
-  overflow-y: auto;
-}
