@@ -28,6 +28,10 @@ args = "Build Next.js App"
 task = "workflow.run"
 args = "Start Next.js App"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start Next.js Dev Server"
+
 [[workflows.workflow]]
 name = "Start Next.js app"
 author = "agent"
@@ -38,7 +42,7 @@ agentRequireRestartOnSave = false
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm run dev"
-waitForPort = 3000
+waitForPort = 3001
 
 [[workflows.workflow]]
 name = "Next.js Dev Server"
@@ -73,6 +77,18 @@ agentRequireRestartOnSave = false
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm start"
+waitForPort = 3001
+
+[[workflows.workflow]]
+name = "Start Next.js Dev Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
 waitForPort = 3001
 
 [deployment]
