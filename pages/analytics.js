@@ -1,5 +1,39 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+
+const TotalCommentariesChart = ({ total }) => (
+  <ResponsiveContainer width="100%" height={300}>
+    <BarChart data={[{ name: 'Total Commentaries', total }]}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Legend />
+      <Bar dataKey="total" fill="#8884d8" />
+    </BarChart>
+  </ResponsiveContainer>
+);
+
+const LatestCommentariesChart = ({ commentaries }) => {
+  const data = commentaries.map(c => ({
+    timestamp: new Date(c.timestamp).toLocaleString(),
+    length: c.commentary.length
+  })).reverse();
+
+  return (
+    <ResponsiveContainer width="100%" height={300}>
+      <LineChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="timestamp" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="length" stroke="#8884d8" />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
 
 export default function Analytics() {
   const [analyticsData, setAnalyticsData] = useState(null);
@@ -34,22 +68,17 @@ export default function Analytics() {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Analytics Dashboard</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-2">Total Commentaries</h2>
-            <p className="text-3xl font-bold">
-              {analyticsData.totalCommentaries}
-            </p>
+            <TotalCommentariesChart total={analyticsData.totalCommentaries} />
           </div>
-          {/* <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-semibold mb-2">Average Commentary Length</h2>
-            <p className="text-3xl font-bold">{analyticsData.averageCommentaryLength.toFixed(2)} characters</p>
-          </div> */}
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-2xl font-semibold mb-4">Latest Commentaries</h2>
-          <table className="w-full">
+          <LatestCommentariesChart commentaries={analyticsData.latestCommentaries} />
+          <table className="w-full mt-4">
             <thead>
               <tr className="bg-gray-100">
                 <th className="px-4 py-2 text-left">Timestamp</th>
@@ -57,7 +86,7 @@ export default function Analytics() {
               </tr>
             </thead>
             <tbody>
-              {analyticsData.latestCommentaries.map((commentary, index) => (
+              {analyticsData?.latestCommentaries?.map((commentary, index) => (
                 <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : ""}>
                   <td className="px-4 py-2">
                     {new Date(commentary.timestamp).toLocaleString()}

@@ -12,6 +12,22 @@ exports.id = "pages/analytics";
 exports.ids = ["pages/analytics"];
 exports.modules = {
 
+/***/ "__barrel_optimize__?names=Bar,BarChart,CartesianGrid,Legend,Line,LineChart,ResponsiveContainer,Tooltip,XAxis,YAxis!=!./node_modules/recharts/lib/index.js":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** __barrel_optimize__?names=Bar,BarChart,CartesianGrid,Legend,Line,LineChart,ResponsiveContainer,Tooltip,XAxis,YAxis!=!./node_modules/recharts/lib/index.js ***!
+  \*****************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _home_runner_WarriorsCommentaryAPI_node_modules_recharts_lib_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/recharts/lib/index.js */ "./node_modules/recharts/lib/index.js");
+/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _home_runner_WarriorsCommentaryAPI_node_modules_recharts_lib_index_js__WEBPACK_IMPORTED_MODULE_0__) if(__WEBPACK_IMPORT_KEY__ !== "default") __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _home_runner_WarriorsCommentaryAPI_node_modules_recharts_lib_index_js__WEBPACK_IMPORTED_MODULE_0__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
+
+
+/***/ }),
+
 /***/ "./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES&page=%2Fanalytics&preferredRegion=&absolutePagePath=.%2Fpages%2Fanalytics.js&absoluteAppPath=private-next-pages%2F_app&absoluteDocumentPath=private-next-pages%2F_document&middlewareConfigBase64=e30%3D!":
 /*!******************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES&page=%2Fanalytics&preferredRegion=&absolutePagePath=.%2Fpages%2Fanalytics.js&absoluteAppPath=private-next-pages%2F_app&absoluteDocumentPath=private-next-pages%2F_document&middlewareConfigBase64=e30%3D! ***!
@@ -52,7 +68,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Analytics)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"react/jsx-dev-runtime\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _components_Layout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Layout */ \"./components/Layout.js\");\n\n\n\nfunction Analytics() {\n    const [analyticsData, setAnalyticsData] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);\n    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{\n        fetchAnalyticsData();\n    }, []);\n    const fetchAnalyticsData = async ()=>{\n        try {\n            const response = await fetch(\"/api/analytics\");\n            const data = await response.json();\n            setAnalyticsData(data);\n        } catch (error) {\n            console.error(\"Error fetching analytics data:\", error);\n        }\n    };\n    if (!analyticsData) {\n        return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_Layout__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                className: \"container mx-auto px-4 py-8\",\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                        className: \"text-3xl font-bold mb-6\",\n                        children: \"Analytics Dashboard\"\n                    }, void 0, false, {\n                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                        lineNumber: 25,\n                        columnNumber: 11\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                        children: \"Loading...\"\n                    }, void 0, false, {\n                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                        lineNumber: 26,\n                        columnNumber: 11\n                    }, this)\n                ]\n            }, void 0, true, {\n                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                lineNumber: 24,\n                columnNumber: 9\n            }, this)\n        }, void 0, false, {\n            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n            lineNumber: 23,\n            columnNumber: 7\n        }, this);\n    }\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_Layout__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n            className: \"container mx-auto px-4 py-8\",\n            children: [\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                    className: \"text-3xl font-bold mb-6\",\n                    children: \"Analytics Dashboard\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 35,\n                    columnNumber: 9\n                }, this),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                    className: \"grid grid-cols-1 md:grid-cols-2 gap-6 mb-8\",\n                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                        className: \"bg-white p-6 rounded-lg shadow\",\n                        children: [\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                                className: \"text-xl font-semibold mb-2\",\n                                children: \"Total Commentaries\"\n                            }, void 0, false, {\n                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                lineNumber: 39,\n                                columnNumber: 13\n                            }, this),\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                                className: \"text-3xl font-bold\",\n                                children: analyticsData.totalCommentaries\n                            }, void 0, false, {\n                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                lineNumber: 40,\n                                columnNumber: 13\n                            }, this)\n                        ]\n                    }, void 0, true, {\n                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                        lineNumber: 38,\n                        columnNumber: 11\n                    }, this)\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 37,\n                    columnNumber: 9\n                }, this),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                    className: \"bg-white p-6 rounded-lg shadow\",\n                    children: [\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                            className: \"text-2xl font-semibold mb-4\",\n                            children: \"Latest Commentaries\"\n                        }, void 0, false, {\n                            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                            lineNumber: 51,\n                            columnNumber: 11\n                        }, this),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"table\", {\n                            className: \"w-full\",\n                            children: [\n                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"thead\", {\n                                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"tr\", {\n                                        className: \"bg-gray-100\",\n                                        children: [\n                                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"th\", {\n                                                className: \"px-4 py-2 text-left\",\n                                                children: \"Timestamp\"\n                                            }, void 0, false, {\n                                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                lineNumber: 55,\n                                                columnNumber: 17\n                                            }, this),\n                                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"th\", {\n                                                className: \"px-4 py-2 text-left\",\n                                                children: \"Commentary\"\n                                            }, void 0, false, {\n                                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                lineNumber: 56,\n                                                columnNumber: 17\n                                            }, this)\n                                        ]\n                                    }, void 0, true, {\n                                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                        lineNumber: 54,\n                                        columnNumber: 15\n                                    }, this)\n                                }, void 0, false, {\n                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                    lineNumber: 53,\n                                    columnNumber: 13\n                                }, this),\n                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"tbody\", {\n                                    children: analyticsData.latestCommentaries.map((commentary, index)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"tr\", {\n                                            className: index % 2 === 0 ? \"bg-gray-50\" : \"\",\n                                            children: [\n                                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"td\", {\n                                                    className: \"px-4 py-2\",\n                                                    children: new Date(commentary.timestamp).toLocaleString()\n                                                }, void 0, false, {\n                                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                    lineNumber: 62,\n                                                    columnNumber: 19\n                                                }, this),\n                                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"td\", {\n                                                    className: \"px-4 py-2\",\n                                                    children: commentary.commentary\n                                                }, void 0, false, {\n                                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                    lineNumber: 65,\n                                                    columnNumber: 19\n                                                }, this)\n                                            ]\n                                        }, index, true, {\n                                            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                            lineNumber: 61,\n                                            columnNumber: 17\n                                        }, this))\n                                }, void 0, false, {\n                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                    lineNumber: 59,\n                                    columnNumber: 13\n                                }, this)\n                            ]\n                        }, void 0, true, {\n                            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                            lineNumber: 52,\n                            columnNumber: 11\n                        }, this)\n                    ]\n                }, void 0, true, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 50,\n                    columnNumber: 9\n                }, this)\n            ]\n        }, void 0, true, {\n            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n            lineNumber: 34,\n            columnNumber: 7\n        }, this)\n    }, void 0, false, {\n        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n        lineNumber: 33,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9wYWdlcy9hbmFseXRpY3MuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7OztBQUE0QztBQUNGO0FBRTNCLFNBQVNHO0lBQ3RCLE1BQU0sQ0FBQ0MsZUFBZUMsaUJBQWlCLEdBQUdMLCtDQUFRQSxDQUFDO0lBRW5EQyxnREFBU0EsQ0FBQztRQUNSSztJQUNGLEdBQUcsRUFBRTtJQUVMLE1BQU1BLHFCQUFxQjtRQUN6QixJQUFJO1lBQ0YsTUFBTUMsV0FBVyxNQUFNQyxNQUFNO1lBQzdCLE1BQU1DLE9BQU8sTUFBTUYsU0FBU0csSUFBSTtZQUNoQ0wsaUJBQWlCSTtRQUNuQixFQUFFLE9BQU9FLE9BQU87WUFDZEMsUUFBUUQsS0FBSyxDQUFDLGtDQUFrQ0E7UUFDbEQ7SUFDRjtJQUVBLElBQUksQ0FBQ1AsZUFBZTtRQUNsQixxQkFDRSw4REFBQ0YsMERBQU1BO3NCQUNMLDRFQUFDVztnQkFBSUMsV0FBVTs7a0NBQ2IsOERBQUNDO3dCQUFHRCxXQUFVO2tDQUEwQjs7Ozs7O2tDQUN4Qyw4REFBQ0U7a0NBQUU7Ozs7Ozs7Ozs7Ozs7Ozs7O0lBSVg7SUFFQSxxQkFDRSw4REFBQ2QsMERBQU1BO2tCQUNMLDRFQUFDVztZQUFJQyxXQUFVOzs4QkFDYiw4REFBQ0M7b0JBQUdELFdBQVU7OEJBQTBCOzs7Ozs7OEJBRXhDLDhEQUFDRDtvQkFBSUMsV0FBVTs4QkFDYiw0RUFBQ0Q7d0JBQUlDLFdBQVU7OzBDQUNiLDhEQUFDRztnQ0FBR0gsV0FBVTswQ0FBNkI7Ozs7OzswQ0FDM0MsOERBQUNFO2dDQUFFRixXQUFVOzBDQUNWVixjQUFjYyxpQkFBaUI7Ozs7Ozs7Ozs7Ozs7Ozs7OzhCQVN0Qyw4REFBQ0w7b0JBQUlDLFdBQVU7O3NDQUNiLDhEQUFDRzs0QkFBR0gsV0FBVTtzQ0FBOEI7Ozs7OztzQ0FDNUMsOERBQUNLOzRCQUFNTCxXQUFVOzs4Q0FDZiw4REFBQ007OENBQ0MsNEVBQUNDO3dDQUFHUCxXQUFVOzswREFDWiw4REFBQ1E7Z0RBQUdSLFdBQVU7MERBQXNCOzs7Ozs7MERBQ3BDLDhEQUFDUTtnREFBR1IsV0FBVTswREFBc0I7Ozs7Ozs7Ozs7Ozs7Ozs7OzhDQUd4Qyw4REFBQ1M7OENBQ0VuQixjQUFjb0Isa0JBQWtCLENBQUNDLEdBQUcsQ0FBQyxDQUFDQyxZQUFZQyxzQkFDakQsOERBQUNOOzRDQUFlUCxXQUFXYSxRQUFRLE1BQU0sSUFBSSxlQUFlOzs4REFDMUQsOERBQUNDO29EQUFHZCxXQUFVOzhEQUNYLElBQUllLEtBQUtILFdBQVdJLFNBQVMsRUFBRUMsY0FBYzs7Ozs7OzhEQUVoRCw4REFBQ0g7b0RBQUdkLFdBQVU7OERBQWFZLFdBQVdBLFVBQVU7Ozs7Ozs7MkNBSnpDQzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBYXpCIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vd2FycmlvcnNjb21tZW50YXJ5YXBpLy4vcGFnZXMvYW5hbHl0aWNzLmpzPzEzOGQiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgdXNlU3RhdGUsIHVzZUVmZmVjdCB9IGZyb20gXCJyZWFjdFwiO1xuaW1wb3J0IExheW91dCBmcm9tIFwiLi4vY29tcG9uZW50cy9MYXlvdXRcIjtcblxuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gQW5hbHl0aWNzKCkge1xuICBjb25zdCBbYW5hbHl0aWNzRGF0YSwgc2V0QW5hbHl0aWNzRGF0YV0gPSB1c2VTdGF0ZShudWxsKTtcblxuICB1c2VFZmZlY3QoKCkgPT4ge1xuICAgIGZldGNoQW5hbHl0aWNzRGF0YSgpO1xuICB9LCBbXSk7XG5cbiAgY29uc3QgZmV0Y2hBbmFseXRpY3NEYXRhID0gYXN5bmMgKCkgPT4ge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKFwiL2FwaS9hbmFseXRpY3NcIik7XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuanNvbigpO1xuICAgICAgc2V0QW5hbHl0aWNzRGF0YShkYXRhKTtcbiAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgY29uc29sZS5lcnJvcihcIkVycm9yIGZldGNoaW5nIGFuYWx5dGljcyBkYXRhOlwiLCBlcnJvcik7XG4gICAgfVxuICB9O1xuXG4gIGlmICghYW5hbHl0aWNzRGF0YSkge1xuICAgIHJldHVybiAoXG4gICAgICA8TGF5b3V0PlxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImNvbnRhaW5lciBteC1hdXRvIHB4LTQgcHktOFwiPlxuICAgICAgICAgIDxoMSBjbGFzc05hbWU9XCJ0ZXh0LTN4bCBmb250LWJvbGQgbWItNlwiPkFuYWx5dGljcyBEYXNoYm9hcmQ8L2gxPlxuICAgICAgICAgIDxwPkxvYWRpbmcuLi48L3A+XG4gICAgICAgIDwvZGl2PlxuICAgICAgPC9MYXlvdXQ+XG4gICAgKTtcbiAgfVxuXG4gIHJldHVybiAoXG4gICAgPExheW91dD5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwiY29udGFpbmVyIG14LWF1dG8gcHgtNCBweS04XCI+XG4gICAgICAgIDxoMSBjbGFzc05hbWU9XCJ0ZXh0LTN4bCBmb250LWJvbGQgbWItNlwiPkFuYWx5dGljcyBEYXNoYm9hcmQ8L2gxPlxuXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZ3JpZCBncmlkLWNvbHMtMSBtZDpncmlkLWNvbHMtMiBnYXAtNiBtYi04XCI+XG4gICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJiZy13aGl0ZSBwLTYgcm91bmRlZC1sZyBzaGFkb3dcIj5cbiAgICAgICAgICAgIDxoMiBjbGFzc05hbWU9XCJ0ZXh0LXhsIGZvbnQtc2VtaWJvbGQgbWItMlwiPlRvdGFsIENvbW1lbnRhcmllczwvaDI+XG4gICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LTN4bCBmb250LWJvbGRcIj5cbiAgICAgICAgICAgICAge2FuYWx5dGljc0RhdGEudG90YWxDb21tZW50YXJpZXN9XG4gICAgICAgICAgICA8L3A+XG4gICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgey8qIDxkaXYgY2xhc3NOYW1lPVwiYmctd2hpdGUgcC02IHJvdW5kZWQtbGcgc2hhZG93XCI+XG4gICAgICAgICAgICA8aDIgY2xhc3NOYW1lPVwidGV4dC14bCBmb250LXNlbWlib2xkIG1iLTJcIj5BdmVyYWdlIENvbW1lbnRhcnkgTGVuZ3RoPC9oMj5cbiAgICAgICAgICAgIDxwIGNsYXNzTmFtZT1cInRleHQtM3hsIGZvbnQtYm9sZFwiPnthbmFseXRpY3NEYXRhLmF2ZXJhZ2VDb21tZW50YXJ5TGVuZ3RoLnRvRml4ZWQoMil9IGNoYXJhY3RlcnM8L3A+XG4gICAgICAgICAgPC9kaXY+ICovfVxuICAgICAgICA8L2Rpdj5cblxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImJnLXdoaXRlIHAtNiByb3VuZGVkLWxnIHNoYWRvd1wiPlxuICAgICAgICAgIDxoMiBjbGFzc05hbWU9XCJ0ZXh0LTJ4bCBmb250LXNlbWlib2xkIG1iLTRcIj5MYXRlc3QgQ29tbWVudGFyaWVzPC9oMj5cbiAgICAgICAgICA8dGFibGUgY2xhc3NOYW1lPVwidy1mdWxsXCI+XG4gICAgICAgICAgICA8dGhlYWQ+XG4gICAgICAgICAgICAgIDx0ciBjbGFzc05hbWU9XCJiZy1ncmF5LTEwMFwiPlxuICAgICAgICAgICAgICAgIDx0aCBjbGFzc05hbWU9XCJweC00IHB5LTIgdGV4dC1sZWZ0XCI+VGltZXN0YW1wPC90aD5cbiAgICAgICAgICAgICAgICA8dGggY2xhc3NOYW1lPVwicHgtNCBweS0yIHRleHQtbGVmdFwiPkNvbW1lbnRhcnk8L3RoPlxuICAgICAgICAgICAgICA8L3RyPlxuICAgICAgICAgICAgPC90aGVhZD5cbiAgICAgICAgICAgIDx0Ym9keT5cbiAgICAgICAgICAgICAge2FuYWx5dGljc0RhdGEubGF0ZXN0Q29tbWVudGFyaWVzLm1hcCgoY29tbWVudGFyeSwgaW5kZXgpID0+IChcbiAgICAgICAgICAgICAgICA8dHIga2V5PXtpbmRleH0gY2xhc3NOYW1lPXtpbmRleCAlIDIgPT09IDAgPyBcImJnLWdyYXktNTBcIiA6IFwiXCJ9PlxuICAgICAgICAgICAgICAgICAgPHRkIGNsYXNzTmFtZT1cInB4LTQgcHktMlwiPlxuICAgICAgICAgICAgICAgICAgICB7bmV3IERhdGUoY29tbWVudGFyeS50aW1lc3RhbXApLnRvTG9jYWxlU3RyaW5nKCl9XG4gICAgICAgICAgICAgICAgICA8L3RkPlxuICAgICAgICAgICAgICAgICAgPHRkIGNsYXNzTmFtZT1cInB4LTQgcHktMlwiPntjb21tZW50YXJ5LmNvbW1lbnRhcnl9PC90ZD5cbiAgICAgICAgICAgICAgICA8L3RyPlxuICAgICAgICAgICAgICApKX1cbiAgICAgICAgICAgIDwvdGJvZHk+XG4gICAgICAgICAgPC90YWJsZT5cbiAgICAgICAgPC9kaXY+XG4gICAgICA8L2Rpdj5cbiAgICA8L0xheW91dD5cbiAgKTtcbn1cbiJdLCJuYW1lcyI6WyJ1c2VTdGF0ZSIsInVzZUVmZmVjdCIsIkxheW91dCIsIkFuYWx5dGljcyIsImFuYWx5dGljc0RhdGEiLCJzZXRBbmFseXRpY3NEYXRhIiwiZmV0Y2hBbmFseXRpY3NEYXRhIiwicmVzcG9uc2UiLCJmZXRjaCIsImRhdGEiLCJqc29uIiwiZXJyb3IiLCJjb25zb2xlIiwiZGl2IiwiY2xhc3NOYW1lIiwiaDEiLCJwIiwiaDIiLCJ0b3RhbENvbW1lbnRhcmllcyIsInRhYmxlIiwidGhlYWQiLCJ0ciIsInRoIiwidGJvZHkiLCJsYXRlc3RDb21tZW50YXJpZXMiLCJtYXAiLCJjb21tZW50YXJ5IiwiaW5kZXgiLCJ0ZCIsIkRhdGUiLCJ0aW1lc3RhbXAiLCJ0b0xvY2FsZVN0cmluZyJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./pages/analytics.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Analytics)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"react/jsx-dev-runtime\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _components_Layout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Layout */ \"./components/Layout.js\");\n/* harmony import */ var _barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! __barrel_optimize__?names=Bar,BarChart,CartesianGrid,Legend,Line,LineChart,ResponsiveContainer,Tooltip,XAxis,YAxis!=!recharts */ \"__barrel_optimize__?names=Bar,BarChart,CartesianGrid,Legend,Line,LineChart,ResponsiveContainer,Tooltip,XAxis,YAxis!=!./node_modules/recharts/lib/index.js\");\n\n\n\n\nconst TotalCommentariesChart = ({ total })=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.ResponsiveContainer, {\n        width: \"100%\",\n        height: 300,\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.BarChart, {\n            data: [\n                {\n                    name: \"Total Commentaries\",\n                    total\n                }\n            ],\n            children: [\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.CartesianGrid, {\n                    strokeDasharray: \"3 3\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 8,\n                    columnNumber: 7\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.XAxis, {\n                    dataKey: \"name\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 9,\n                    columnNumber: 7\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.YAxis, {}, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 10,\n                    columnNumber: 7\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.Tooltip, {}, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 11,\n                    columnNumber: 7\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.Legend, {}, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 12,\n                    columnNumber: 7\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.Bar, {\n                    dataKey: \"total\",\n                    fill: \"#8884d8\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 13,\n                    columnNumber: 7\n                }, undefined)\n            ]\n        }, void 0, true, {\n            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n            lineNumber: 7,\n            columnNumber: 5\n        }, undefined)\n    }, void 0, false, {\n        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n        lineNumber: 6,\n        columnNumber: 3\n    }, undefined);\nconst LatestCommentariesChart = ({ commentaries })=>{\n    const data = commentaries.map((c)=>({\n            timestamp: new Date(c.timestamp).toLocaleString(),\n            length: c.commentary.length\n        })).reverse();\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.ResponsiveContainer, {\n        width: \"100%\",\n        height: 300,\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.LineChart, {\n            data: data,\n            children: [\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.CartesianGrid, {\n                    strokeDasharray: \"3 3\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 27,\n                    columnNumber: 9\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.XAxis, {\n                    dataKey: \"timestamp\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 28,\n                    columnNumber: 9\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.YAxis, {}, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 29,\n                    columnNumber: 9\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.Tooltip, {}, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 30,\n                    columnNumber: 9\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.Legend, {}, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 31,\n                    columnNumber: 9\n                }, undefined),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_barrel_optimize_names_Bar_BarChart_CartesianGrid_Legend_Line_LineChart_ResponsiveContainer_Tooltip_XAxis_YAxis_recharts__WEBPACK_IMPORTED_MODULE_3__.Line, {\n                    type: \"monotone\",\n                    dataKey: \"length\",\n                    stroke: \"#8884d8\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 32,\n                    columnNumber: 9\n                }, undefined)\n            ]\n        }, void 0, true, {\n            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n            lineNumber: 26,\n            columnNumber: 7\n        }, undefined)\n    }, void 0, false, {\n        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n        lineNumber: 25,\n        columnNumber: 5\n    }, undefined);\n};\nfunction Analytics() {\n    const [analyticsData, setAnalyticsData] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);\n    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(()=>{\n        fetchAnalyticsData();\n    }, []);\n    const fetchAnalyticsData = async ()=>{\n        try {\n            const response = await fetch(\"/api/analytics\");\n            const data = await response.json();\n            setAnalyticsData(data);\n        } catch (error) {\n            console.error(\"Error fetching analytics data:\", error);\n        }\n    };\n    if (!analyticsData) {\n        return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_Layout__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                className: \"container mx-auto px-4 py-8\",\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                        className: \"text-3xl font-bold mb-6\",\n                        children: \"Analytics Dashboard\"\n                    }, void 0, false, {\n                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                        lineNumber: 59,\n                        columnNumber: 11\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                        children: \"Loading...\"\n                    }, void 0, false, {\n                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                        lineNumber: 60,\n                        columnNumber: 11\n                    }, this)\n                ]\n            }, void 0, true, {\n                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                lineNumber: 58,\n                columnNumber: 9\n            }, this)\n        }, void 0, false, {\n            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n            lineNumber: 57,\n            columnNumber: 7\n        }, this);\n    }\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(_components_Layout__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n            className: \"container mx-auto px-4 py-8\",\n            children: [\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h1\", {\n                    className: \"text-3xl font-bold mb-6\",\n                    children: \"Analytics Dashboard\"\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 69,\n                    columnNumber: 9\n                }, this),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                    className: \"grid grid-cols-1 gap-6 mb-8\",\n                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                        className: \"bg-white p-6 rounded-lg shadow\",\n                        children: [\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                                className: \"text-xl font-semibold mb-2\",\n                                children: \"Total Commentaries\"\n                            }, void 0, false, {\n                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                lineNumber: 73,\n                                columnNumber: 13\n                            }, this),\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(TotalCommentariesChart, {\n                                total: analyticsData.totalCommentaries\n                            }, void 0, false, {\n                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                lineNumber: 74,\n                                columnNumber: 13\n                            }, this)\n                        ]\n                    }, void 0, true, {\n                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                        lineNumber: 72,\n                        columnNumber: 11\n                    }, this)\n                }, void 0, false, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 71,\n                    columnNumber: 9\n                }, this),\n                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                    className: \"bg-white p-6 rounded-lg shadow\",\n                    children: [\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"h2\", {\n                            className: \"text-2xl font-semibold mb-4\",\n                            children: \"Latest Commentaries\"\n                        }, void 0, false, {\n                            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                            lineNumber: 79,\n                            columnNumber: 11\n                        }, this),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(LatestCommentariesChart, {\n                            commentaries: analyticsData.latestCommentaries\n                        }, void 0, false, {\n                            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                            lineNumber: 80,\n                            columnNumber: 11\n                        }, this),\n                        /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"table\", {\n                            className: \"w-full mt-4\",\n                            children: [\n                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"thead\", {\n                                    children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"tr\", {\n                                        className: \"bg-gray-100\",\n                                        children: [\n                                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"th\", {\n                                                className: \"px-4 py-2 text-left\",\n                                                children: \"Timestamp\"\n                                            }, void 0, false, {\n                                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                lineNumber: 84,\n                                                columnNumber: 17\n                                            }, this),\n                                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"th\", {\n                                                className: \"px-4 py-2 text-left\",\n                                                children: \"Commentary\"\n                                            }, void 0, false, {\n                                                fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                lineNumber: 85,\n                                                columnNumber: 17\n                                            }, this)\n                                        ]\n                                    }, void 0, true, {\n                                        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                        lineNumber: 83,\n                                        columnNumber: 15\n                                    }, this)\n                                }, void 0, false, {\n                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                    lineNumber: 82,\n                                    columnNumber: 13\n                                }, this),\n                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"tbody\", {\n                                    children: analyticsData?.latestCommentaries?.map((commentary, index)=>/*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"tr\", {\n                                            className: index % 2 === 0 ? \"bg-gray-50\" : \"\",\n                                            children: [\n                                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"td\", {\n                                                    className: \"px-4 py-2\",\n                                                    children: new Date(commentary.timestamp).toLocaleString()\n                                                }, void 0, false, {\n                                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                    lineNumber: 91,\n                                                    columnNumber: 19\n                                                }, this),\n                                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"td\", {\n                                                    className: \"px-4 py-2\",\n                                                    children: commentary.commentary\n                                                }, void 0, false, {\n                                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                                    lineNumber: 94,\n                                                    columnNumber: 19\n                                                }, this)\n                                            ]\n                                        }, index, true, {\n                                            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                            lineNumber: 90,\n                                            columnNumber: 17\n                                        }, this))\n                                }, void 0, false, {\n                                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                                    lineNumber: 88,\n                                    columnNumber: 13\n                                }, this)\n                            ]\n                        }, void 0, true, {\n                            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                            lineNumber: 81,\n                            columnNumber: 11\n                        }, this)\n                    ]\n                }, void 0, true, {\n                    fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n                    lineNumber: 78,\n                    columnNumber: 9\n                }, this)\n            ]\n        }, void 0, true, {\n            fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n            lineNumber: 68,\n            columnNumber: 7\n        }, this)\n    }, void 0, false, {\n        fileName: \"/home/runner/WarriorsCommentaryAPI/pages/analytics.js\",\n        lineNumber: 67,\n        columnNumber: 5\n    }, this);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9wYWdlcy9hbmFseXRpY3MuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7QUFBNEM7QUFDRjtBQUNtRjtBQUU3SCxNQUFNYSx5QkFBeUIsQ0FBQyxFQUFFQyxLQUFLLEVBQUUsaUJBQ3ZDLDhEQUFDSix5S0FBbUJBO1FBQUNLLE9BQU07UUFBT0MsUUFBUTtrQkFDeEMsNEVBQUNiLDhKQUFRQTtZQUFDYyxNQUFNO2dCQUFDO29CQUFFQyxNQUFNO29CQUFzQko7Z0JBQU07YUFBRTs7OEJBQ3JELDhEQUFDUCxtS0FBYUE7b0JBQUNZLGlCQUFnQjs7Ozs7OzhCQUMvQiw4REFBQ2QsMkpBQUtBO29CQUFDZSxTQUFROzs7Ozs7OEJBQ2YsOERBQUNkLDJKQUFLQTs7Ozs7OEJBQ04sOERBQUNFLDZKQUFPQTs7Ozs7OEJBQ1IsOERBQUNDLDRKQUFNQTs7Ozs7OEJBQ1AsOERBQUNMLHlKQUFHQTtvQkFBQ2dCLFNBQVE7b0JBQVFDLE1BQUs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBS2hDLE1BQU1DLDBCQUEwQixDQUFDLEVBQUVDLFlBQVksRUFBRTtJQUMvQyxNQUFNTixPQUFPTSxhQUFhQyxHQUFHLENBQUNDLENBQUFBLElBQU07WUFDbENDLFdBQVcsSUFBSUMsS0FBS0YsRUFBRUMsU0FBUyxFQUFFRSxjQUFjO1lBQy9DQyxRQUFRSixFQUFFSyxVQUFVLENBQUNELE1BQU07UUFDN0IsSUFBSUUsT0FBTztJQUVYLHFCQUNFLDhEQUFDckIseUtBQW1CQTtRQUFDSyxPQUFNO1FBQU9DLFFBQVE7a0JBQ3hDLDRFQUFDTCwrSkFBU0E7WUFBQ00sTUFBTUE7OzhCQUNmLDhEQUFDVixtS0FBYUE7b0JBQUNZLGlCQUFnQjs7Ozs7OzhCQUMvQiw4REFBQ2QsMkpBQUtBO29CQUFDZSxTQUFROzs7Ozs7OEJBQ2YsOERBQUNkLDJKQUFLQTs7Ozs7OEJBQ04sOERBQUNFLDZKQUFPQTs7Ozs7OEJBQ1IsOERBQUNDLDRKQUFNQTs7Ozs7OEJBQ1AsOERBQUNHLDBKQUFJQTtvQkFBQ29CLE1BQUs7b0JBQVdaLFNBQVE7b0JBQVNhLFFBQU87Ozs7Ozs7Ozs7Ozs7Ozs7O0FBSXREO0FBRWUsU0FBU0M7SUFDdEIsTUFBTSxDQUFDQyxlQUFlQyxpQkFBaUIsR0FBR3BDLCtDQUFRQSxDQUFDO0lBRW5EQyxnREFBU0EsQ0FBQztRQUNSb0M7SUFDRixHQUFHLEVBQUU7SUFFTCxNQUFNQSxxQkFBcUI7UUFDekIsSUFBSTtZQUNGLE1BQU1DLFdBQVcsTUFBTUMsTUFBTTtZQUM3QixNQUFNdEIsT0FBTyxNQUFNcUIsU0FBU0UsSUFBSTtZQUNoQ0osaUJBQWlCbkI7UUFDbkIsRUFBRSxPQUFPd0IsT0FBTztZQUNkQyxRQUFRRCxLQUFLLENBQUMsa0NBQWtDQTtRQUNsRDtJQUNGO0lBRUEsSUFBSSxDQUFDTixlQUFlO1FBQ2xCLHFCQUNFLDhEQUFDakMsMERBQU1BO3NCQUNMLDRFQUFDeUM7Z0JBQUlDLFdBQVU7O2tDQUNiLDhEQUFDQzt3QkFBR0QsV0FBVTtrQ0FBMEI7Ozs7OztrQ0FDeEMsOERBQUNFO2tDQUFFOzs7Ozs7Ozs7Ozs7Ozs7OztJQUlYO0lBRUEscUJBQ0UsOERBQUM1QywwREFBTUE7a0JBQ0wsNEVBQUN5QztZQUFJQyxXQUFVOzs4QkFDYiw4REFBQ0M7b0JBQUdELFdBQVU7OEJBQTBCOzs7Ozs7OEJBRXhDLDhEQUFDRDtvQkFBSUMsV0FBVTs4QkFDYiw0RUFBQ0Q7d0JBQUlDLFdBQVU7OzBDQUNiLDhEQUFDRztnQ0FBR0gsV0FBVTswQ0FBNkI7Ozs7OzswQ0FDM0MsOERBQUMvQjtnQ0FBdUJDLE9BQU9xQixjQUFjYSxpQkFBaUI7Ozs7Ozs7Ozs7Ozs7Ozs7OzhCQUlsRSw4REFBQ0w7b0JBQUlDLFdBQVU7O3NDQUNiLDhEQUFDRzs0QkFBR0gsV0FBVTtzQ0FBOEI7Ozs7OztzQ0FDNUMsOERBQUN0Qjs0QkFBd0JDLGNBQWNZLGNBQWNjLGtCQUFrQjs7Ozs7O3NDQUN2RSw4REFBQ0M7NEJBQU1OLFdBQVU7OzhDQUNmLDhEQUFDTzs4Q0FDQyw0RUFBQ0M7d0NBQUdSLFdBQVU7OzBEQUNaLDhEQUFDUztnREFBR1QsV0FBVTswREFBc0I7Ozs7OzswREFDcEMsOERBQUNTO2dEQUFHVCxXQUFVOzBEQUFzQjs7Ozs7Ozs7Ozs7Ozs7Ozs7OENBR3hDLDhEQUFDVTs4Q0FDRW5CLGVBQWVjLG9CQUFvQnpCLElBQUksQ0FBQ00sWUFBWXlCLHNCQUNuRCw4REFBQ0g7NENBQWVSLFdBQVdXLFFBQVEsTUFBTSxJQUFJLGVBQWU7OzhEQUMxRCw4REFBQ0M7b0RBQUdaLFdBQVU7OERBQ1gsSUFBSWpCLEtBQUtHLFdBQVdKLFNBQVMsRUFBRUUsY0FBYzs7Ozs7OzhEQUVoRCw4REFBQzRCO29EQUFHWixXQUFVOzhEQUFhZCxXQUFXQSxVQUFVOzs7Ozs7OzJDQUp6Q3lCOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFhekIiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly93YXJyaW9yc2NvbW1lbnRhcnlhcGkvLi9wYWdlcy9hbmFseXRpY3MuanM/MTM4ZCJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyB1c2VTdGF0ZSwgdXNlRWZmZWN0IH0gZnJvbSBcInJlYWN0XCI7XG5pbXBvcnQgTGF5b3V0IGZyb20gXCIuLi9jb21wb25lbnRzL0xheW91dFwiO1xuaW1wb3J0IHsgQmFyQ2hhcnQsIEJhciwgWEF4aXMsIFlBeGlzLCBDYXJ0ZXNpYW5HcmlkLCBUb29sdGlwLCBMZWdlbmQsIFJlc3BvbnNpdmVDb250YWluZXIsIExpbmVDaGFydCwgTGluZSB9IGZyb20gJ3JlY2hhcnRzJztcblxuY29uc3QgVG90YWxDb21tZW50YXJpZXNDaGFydCA9ICh7IHRvdGFsIH0pID0+IChcbiAgPFJlc3BvbnNpdmVDb250YWluZXIgd2lkdGg9XCIxMDAlXCIgaGVpZ2h0PXszMDB9PlxuICAgIDxCYXJDaGFydCBkYXRhPXtbeyBuYW1lOiAnVG90YWwgQ29tbWVudGFyaWVzJywgdG90YWwgfV19PlxuICAgICAgPENhcnRlc2lhbkdyaWQgc3Ryb2tlRGFzaGFycmF5PVwiMyAzXCIgLz5cbiAgICAgIDxYQXhpcyBkYXRhS2V5PVwibmFtZVwiIC8+XG4gICAgICA8WUF4aXMgLz5cbiAgICAgIDxUb29sdGlwIC8+XG4gICAgICA8TGVnZW5kIC8+XG4gICAgICA8QmFyIGRhdGFLZXk9XCJ0b3RhbFwiIGZpbGw9XCIjODg4NGQ4XCIgLz5cbiAgICA8L0JhckNoYXJ0PlxuICA8L1Jlc3BvbnNpdmVDb250YWluZXI+XG4pO1xuXG5jb25zdCBMYXRlc3RDb21tZW50YXJpZXNDaGFydCA9ICh7IGNvbW1lbnRhcmllcyB9KSA9PiB7XG4gIGNvbnN0IGRhdGEgPSBjb21tZW50YXJpZXMubWFwKGMgPT4gKHtcbiAgICB0aW1lc3RhbXA6IG5ldyBEYXRlKGMudGltZXN0YW1wKS50b0xvY2FsZVN0cmluZygpLFxuICAgIGxlbmd0aDogYy5jb21tZW50YXJ5Lmxlbmd0aFxuICB9KSkucmV2ZXJzZSgpO1xuXG4gIHJldHVybiAoXG4gICAgPFJlc3BvbnNpdmVDb250YWluZXIgd2lkdGg9XCIxMDAlXCIgaGVpZ2h0PXszMDB9PlxuICAgICAgPExpbmVDaGFydCBkYXRhPXtkYXRhfT5cbiAgICAgICAgPENhcnRlc2lhbkdyaWQgc3Ryb2tlRGFzaGFycmF5PVwiMyAzXCIgLz5cbiAgICAgICAgPFhBeGlzIGRhdGFLZXk9XCJ0aW1lc3RhbXBcIiAvPlxuICAgICAgICA8WUF4aXMgLz5cbiAgICAgICAgPFRvb2x0aXAgLz5cbiAgICAgICAgPExlZ2VuZCAvPlxuICAgICAgICA8TGluZSB0eXBlPVwibW9ub3RvbmVcIiBkYXRhS2V5PVwibGVuZ3RoXCIgc3Ryb2tlPVwiIzg4ODRkOFwiIC8+XG4gICAgICA8L0xpbmVDaGFydD5cbiAgICA8L1Jlc3BvbnNpdmVDb250YWluZXI+XG4gICk7XG59O1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBBbmFseXRpY3MoKSB7XG4gIGNvbnN0IFthbmFseXRpY3NEYXRhLCBzZXRBbmFseXRpY3NEYXRhXSA9IHVzZVN0YXRlKG51bGwpO1xuXG4gIHVzZUVmZmVjdCgoKSA9PiB7XG4gICAgZmV0Y2hBbmFseXRpY3NEYXRhKCk7XG4gIH0sIFtdKTtcblxuICBjb25zdCBmZXRjaEFuYWx5dGljc0RhdGEgPSBhc3luYyAoKSA9PiB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgZmV0Y2goXCIvYXBpL2FuYWx5dGljc1wiKTtcbiAgICAgIGNvbnN0IGRhdGEgPSBhd2FpdCByZXNwb25zZS5qc29uKCk7XG4gICAgICBzZXRBbmFseXRpY3NEYXRhKGRhdGEpO1xuICAgIH0gY2F0Y2ggKGVycm9yKSB7XG4gICAgICBjb25zb2xlLmVycm9yKFwiRXJyb3IgZmV0Y2hpbmcgYW5hbHl0aWNzIGRhdGE6XCIsIGVycm9yKTtcbiAgICB9XG4gIH07XG5cbiAgaWYgKCFhbmFseXRpY3NEYXRhKSB7XG4gICAgcmV0dXJuIChcbiAgICAgIDxMYXlvdXQ+XG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiY29udGFpbmVyIG14LWF1dG8gcHgtNCBweS04XCI+XG4gICAgICAgICAgPGgxIGNsYXNzTmFtZT1cInRleHQtM3hsIGZvbnQtYm9sZCBtYi02XCI+QW5hbHl0aWNzIERhc2hib2FyZDwvaDE+XG4gICAgICAgICAgPHA+TG9hZGluZy4uLjwvcD5cbiAgICAgICAgPC9kaXY+XG4gICAgICA8L0xheW91dD5cbiAgICApO1xuICB9XG5cbiAgcmV0dXJuIChcbiAgICA8TGF5b3V0PlxuICAgICAgPGRpdiBjbGFzc05hbWU9XCJjb250YWluZXIgbXgtYXV0byBweC00IHB5LThcIj5cbiAgICAgICAgPGgxIGNsYXNzTmFtZT1cInRleHQtM3hsIGZvbnQtYm9sZCBtYi02XCI+QW5hbHl0aWNzIERhc2hib2FyZDwvaDE+XG5cbiAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJncmlkIGdyaWQtY29scy0xIGdhcC02IG1iLThcIj5cbiAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImJnLXdoaXRlIHAtNiByb3VuZGVkLWxnIHNoYWRvd1wiPlxuICAgICAgICAgICAgPGgyIGNsYXNzTmFtZT1cInRleHQteGwgZm9udC1zZW1pYm9sZCBtYi0yXCI+VG90YWwgQ29tbWVudGFyaWVzPC9oMj5cbiAgICAgICAgICAgIDxUb3RhbENvbW1lbnRhcmllc0NoYXJ0IHRvdGFsPXthbmFseXRpY3NEYXRhLnRvdGFsQ29tbWVudGFyaWVzfSAvPlxuICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cblxuICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImJnLXdoaXRlIHAtNiByb3VuZGVkLWxnIHNoYWRvd1wiPlxuICAgICAgICAgIDxoMiBjbGFzc05hbWU9XCJ0ZXh0LTJ4bCBmb250LXNlbWlib2xkIG1iLTRcIj5MYXRlc3QgQ29tbWVudGFyaWVzPC9oMj5cbiAgICAgICAgICA8TGF0ZXN0Q29tbWVudGFyaWVzQ2hhcnQgY29tbWVudGFyaWVzPXthbmFseXRpY3NEYXRhLmxhdGVzdENvbW1lbnRhcmllc30gLz5cbiAgICAgICAgICA8dGFibGUgY2xhc3NOYW1lPVwidy1mdWxsIG10LTRcIj5cbiAgICAgICAgICAgIDx0aGVhZD5cbiAgICAgICAgICAgICAgPHRyIGNsYXNzTmFtZT1cImJnLWdyYXktMTAwXCI+XG4gICAgICAgICAgICAgICAgPHRoIGNsYXNzTmFtZT1cInB4LTQgcHktMiB0ZXh0LWxlZnRcIj5UaW1lc3RhbXA8L3RoPlxuICAgICAgICAgICAgICAgIDx0aCBjbGFzc05hbWU9XCJweC00IHB5LTIgdGV4dC1sZWZ0XCI+Q29tbWVudGFyeTwvdGg+XG4gICAgICAgICAgICAgIDwvdHI+XG4gICAgICAgICAgICA8L3RoZWFkPlxuICAgICAgICAgICAgPHRib2R5PlxuICAgICAgICAgICAgICB7YW5hbHl0aWNzRGF0YT8ubGF0ZXN0Q29tbWVudGFyaWVzPy5tYXAoKGNvbW1lbnRhcnksIGluZGV4KSA9PiAoXG4gICAgICAgICAgICAgICAgPHRyIGtleT17aW5kZXh9IGNsYXNzTmFtZT17aW5kZXggJSAyID09PSAwID8gXCJiZy1ncmF5LTUwXCIgOiBcIlwifT5cbiAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJweC00IHB5LTJcIj5cbiAgICAgICAgICAgICAgICAgICAge25ldyBEYXRlKGNvbW1lbnRhcnkudGltZXN0YW1wKS50b0xvY2FsZVN0cmluZygpfVxuICAgICAgICAgICAgICAgICAgPC90ZD5cbiAgICAgICAgICAgICAgICAgIDx0ZCBjbGFzc05hbWU9XCJweC00IHB5LTJcIj57Y29tbWVudGFyeS5jb21tZW50YXJ5fTwvdGQ+XG4gICAgICAgICAgICAgICAgPC90cj5cbiAgICAgICAgICAgICAgKSl9XG4gICAgICAgICAgICA8L3Rib2R5PlxuICAgICAgICAgIDwvdGFibGU+XG4gICAgICAgIDwvZGl2PlxuICAgICAgPC9kaXY+XG4gICAgPC9MYXlvdXQ+XG4gICk7XG59XG4iXSwibmFtZXMiOlsidXNlU3RhdGUiLCJ1c2VFZmZlY3QiLCJMYXlvdXQiLCJCYXJDaGFydCIsIkJhciIsIlhBeGlzIiwiWUF4aXMiLCJDYXJ0ZXNpYW5HcmlkIiwiVG9vbHRpcCIsIkxlZ2VuZCIsIlJlc3BvbnNpdmVDb250YWluZXIiLCJMaW5lQ2hhcnQiLCJMaW5lIiwiVG90YWxDb21tZW50YXJpZXNDaGFydCIsInRvdGFsIiwid2lkdGgiLCJoZWlnaHQiLCJkYXRhIiwibmFtZSIsInN0cm9rZURhc2hhcnJheSIsImRhdGFLZXkiLCJmaWxsIiwiTGF0ZXN0Q29tbWVudGFyaWVzQ2hhcnQiLCJjb21tZW50YXJpZXMiLCJtYXAiLCJjIiwidGltZXN0YW1wIiwiRGF0ZSIsInRvTG9jYWxlU3RyaW5nIiwibGVuZ3RoIiwiY29tbWVudGFyeSIsInJldmVyc2UiLCJ0eXBlIiwic3Ryb2tlIiwiQW5hbHl0aWNzIiwiYW5hbHl0aWNzRGF0YSIsInNldEFuYWx5dGljc0RhdGEiLCJmZXRjaEFuYWx5dGljc0RhdGEiLCJyZXNwb25zZSIsImZldGNoIiwianNvbiIsImVycm9yIiwiY29uc29sZSIsImRpdiIsImNsYXNzTmFtZSIsImgxIiwicCIsImgyIiwidG90YWxDb21tZW50YXJpZXMiLCJsYXRlc3RDb21tZW50YXJpZXMiLCJ0YWJsZSIsInRoZWFkIiwidHIiLCJ0aCIsInRib2R5IiwiaW5kZXgiLCJ0ZCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./pages/analytics.js\n");
 
 /***/ }),
 
@@ -63,6 +79,347 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ (() => {
 
 
+
+/***/ }),
+
+/***/ "clsx":
+/*!***********************!*\
+  !*** external "clsx" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("clsx");
+
+/***/ }),
+
+/***/ "eventemitter3":
+/*!********************************!*\
+  !*** external "eventemitter3" ***!
+  \********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("eventemitter3");
+
+/***/ }),
+
+/***/ "lodash/every":
+/*!*******************************!*\
+  !*** external "lodash/every" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/every");
+
+/***/ }),
+
+/***/ "lodash/find":
+/*!******************************!*\
+  !*** external "lodash/find" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/find");
+
+/***/ }),
+
+/***/ "lodash/first":
+/*!*******************************!*\
+  !*** external "lodash/first" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/first");
+
+/***/ }),
+
+/***/ "lodash/flatMap":
+/*!*********************************!*\
+  !*** external "lodash/flatMap" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/flatMap");
+
+/***/ }),
+
+/***/ "lodash/get":
+/*!*****************************!*\
+  !*** external "lodash/get" ***!
+  \*****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/get");
+
+/***/ }),
+
+/***/ "lodash/isBoolean":
+/*!***********************************!*\
+  !*** external "lodash/isBoolean" ***!
+  \***********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isBoolean");
+
+/***/ }),
+
+/***/ "lodash/isEqual":
+/*!*********************************!*\
+  !*** external "lodash/isEqual" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isEqual");
+
+/***/ }),
+
+/***/ "lodash/isFunction":
+/*!************************************!*\
+  !*** external "lodash/isFunction" ***!
+  \************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isFunction");
+
+/***/ }),
+
+/***/ "lodash/isNaN":
+/*!*******************************!*\
+  !*** external "lodash/isNaN" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isNaN");
+
+/***/ }),
+
+/***/ "lodash/isNil":
+/*!*******************************!*\
+  !*** external "lodash/isNil" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isNil");
+
+/***/ }),
+
+/***/ "lodash/isNumber":
+/*!**********************************!*\
+  !*** external "lodash/isNumber" ***!
+  \**********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isNumber");
+
+/***/ }),
+
+/***/ "lodash/isObject":
+/*!**********************************!*\
+  !*** external "lodash/isObject" ***!
+  \**********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isObject");
+
+/***/ }),
+
+/***/ "lodash/isPlainObject":
+/*!***************************************!*\
+  !*** external "lodash/isPlainObject" ***!
+  \***************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isPlainObject");
+
+/***/ }),
+
+/***/ "lodash/isString":
+/*!**********************************!*\
+  !*** external "lodash/isString" ***!
+  \**********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/isString");
+
+/***/ }),
+
+/***/ "lodash/last":
+/*!******************************!*\
+  !*** external "lodash/last" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/last");
+
+/***/ }),
+
+/***/ "lodash/mapValues":
+/*!***********************************!*\
+  !*** external "lodash/mapValues" ***!
+  \***********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/mapValues");
+
+/***/ }),
+
+/***/ "lodash/max":
+/*!*****************************!*\
+  !*** external "lodash/max" ***!
+  \*****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/max");
+
+/***/ }),
+
+/***/ "lodash/maxBy":
+/*!*******************************!*\
+  !*** external "lodash/maxBy" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/maxBy");
+
+/***/ }),
+
+/***/ "lodash/memoize":
+/*!*********************************!*\
+  !*** external "lodash/memoize" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/memoize");
+
+/***/ }),
+
+/***/ "lodash/min":
+/*!*****************************!*\
+  !*** external "lodash/min" ***!
+  \*****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/min");
+
+/***/ }),
+
+/***/ "lodash/minBy":
+/*!*******************************!*\
+  !*** external "lodash/minBy" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/minBy");
+
+/***/ }),
+
+/***/ "lodash/omit":
+/*!******************************!*\
+  !*** external "lodash/omit" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/omit");
+
+/***/ }),
+
+/***/ "lodash/range":
+/*!*******************************!*\
+  !*** external "lodash/range" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/range");
+
+/***/ }),
+
+/***/ "lodash/some":
+/*!******************************!*\
+  !*** external "lodash/some" ***!
+  \******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/some");
+
+/***/ }),
+
+/***/ "lodash/sortBy":
+/*!********************************!*\
+  !*** external "lodash/sortBy" ***!
+  \********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/sortBy");
+
+/***/ }),
+
+/***/ "lodash/sumBy":
+/*!*******************************!*\
+  !*** external "lodash/sumBy" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/sumBy");
+
+/***/ }),
+
+/***/ "lodash/throttle":
+/*!**********************************!*\
+  !*** external "lodash/throttle" ***!
+  \**********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/throttle");
+
+/***/ }),
+
+/***/ "lodash/uniqBy":
+/*!********************************!*\
+  !*** external "lodash/uniqBy" ***!
+  \********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/uniqBy");
+
+/***/ }),
+
+/***/ "lodash/upperFirst":
+/*!************************************!*\
+  !*** external "lodash/upperFirst" ***!
+  \************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("lodash/upperFirst");
 
 /***/ }),
 
@@ -99,6 +456,28 @@ module.exports = require("react");
 
 /***/ }),
 
+/***/ "react-is":
+/*!***************************!*\
+  !*** external "react-is" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("react-is");
+
+/***/ }),
+
+/***/ "react-smooth":
+/*!*******************************!*\
+  !*** external "react-smooth" ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("react-smooth");
+
+/***/ }),
+
 /***/ "react/jsx-dev-runtime":
 /*!****************************************!*\
   !*** external "react/jsx-dev-runtime" ***!
@@ -107,6 +486,50 @@ module.exports = require("react");
 
 "use strict";
 module.exports = require("react/jsx-dev-runtime");
+
+/***/ }),
+
+/***/ "recharts-scale":
+/*!*********************************!*\
+  !*** external "recharts-scale" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("recharts-scale");
+
+/***/ }),
+
+/***/ "tiny-invariant":
+/*!*********************************!*\
+  !*** external "tiny-invariant" ***!
+  \*********************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tiny-invariant");
+
+/***/ }),
+
+/***/ "victory-vendor/d3-scale":
+/*!******************************************!*\
+  !*** external "victory-vendor/d3-scale" ***!
+  \******************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("victory-vendor/d3-scale");
+
+/***/ }),
+
+/***/ "victory-vendor/d3-shape":
+/*!******************************************!*\
+  !*** external "victory-vendor/d3-shape" ***!
+  \******************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("victory-vendor/d3-shape");
 
 /***/ }),
 
@@ -128,7 +551,7 @@ module.exports = require("path");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc"], () => (__webpack_exec__("./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES&page=%2Fanalytics&preferredRegion=&absolutePagePath=.%2Fpages%2Fanalytics.js&absoluteAppPath=private-next-pages%2F_app&absoluteDocumentPath=private-next-pages%2F_document&middlewareConfigBase64=e30%3D!")));
+var __webpack_exports__ = __webpack_require__.X(0, ["vendor-chunks/next","vendor-chunks/@swc","vendor-chunks/recharts"], () => (__webpack_exec__("./node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js?kind=PAGES&page=%2Fanalytics&preferredRegion=&absolutePagePath=.%2Fpages%2Fanalytics.js&absoluteAppPath=private-next-pages%2F_app&absoluteDocumentPath=private-next-pages%2F_document&middlewareConfigBase64=e30%3D!")));
 module.exports = __webpack_exports__;
 
 })();

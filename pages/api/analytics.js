@@ -1,3 +1,4 @@
+import { comment } from "postcss";
 import { commentaryTable } from "../../lib/singleStoreClient";
 
 export default async function handler(req, res) {
@@ -14,10 +15,20 @@ export default async function handler(req, res) {
 
       console.log("Fetched latest commentaries:", latestCommentaries);
 
+      // // Calculate some basic analytics
+      // const totalCommentaries = (
+      //   await commentaryTable.find({
+      //     select: ["timestamp"],
+      //   })
+      // ).length;
+      // console.log("Total commentaries:", totalCommentaries);
+
       // Calculate some basic analytics
-      const totalCommentaries = await commentaryTable.find({
-        select: ["timestamp"],
-      }).length;
+      const totalCommentaries = (
+        await commentaryTable.find({
+          select: ["count(timestamp) AS total"],
+        })
+      )[0].total;
       console.log("Total commentaries:", totalCommentaries);
 
       const analyticsData = {
