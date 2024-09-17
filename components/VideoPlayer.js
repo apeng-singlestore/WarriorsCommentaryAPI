@@ -5,6 +5,8 @@ export default function VideoPlayer({ videoSrc }) {
   const videoRef = useRef(null);
   const [error, setError] = useState(null);
   const [commentary, setCommentary] = useState([]);
+  const [showAIMessages, setShowAIMessages] = useState(true);
+  const [isAIWatching, setIsAIWatching] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -13,8 +15,8 @@ export default function VideoPlayer({ videoSrc }) {
 
     const captureFrame = (time) => {
       if (time - lastCaptureTime >= 2000) {
-        // Capture every 5 seconds
         if (video.readyState >= video.HAVE_CURRENT_DATA) {
+          setIsAIWatching(true);
           const canvas = document.createElement("canvas");
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
@@ -44,12 +46,14 @@ export default function VideoPlayer({ videoSrc }) {
                 ...prevCommentary,
                 { ...data, type: "ai" },
               ]);
+              setIsAIWatching(false);
             })
             .catch((error) => {
               console.error("Error generating commentary:", error);
               setError(
-                "Error generating commentary. Please check the console for details.",
+                "Error generating commentary. Please check the console for details."
               );
+              setIsAIWatching(false);
             });
 
           lastCaptureTime = time;
@@ -66,6 +70,7 @@ export default function VideoPlayer({ videoSrc }) {
     const handlePause = () => {
       console.log("Video playback paused");
       cancelAnimationFrame(rafId);
+      setIsAIWatching(false);
     };
 
     const handleError = (e) => {
@@ -94,9 +99,13 @@ export default function VideoPlayer({ videoSrc }) {
     setCommentary((prevCommentary) => [...prevCommentary, userComment]);
   };
 
+  const toggleAIMessages = () => {
+    setShowAIMessages(!showAIMessages);
+  };
+
   return (
     <div className="flex flex-row h-screen videoplayer">
-      <div className="w-2/3 p-4">
+      <div className="w-2/3 p-4 relative">
         <video
           ref={videoRef}
           src={videoSrc}
@@ -105,11 +114,18 @@ export default function VideoPlayer({ videoSrc }) {
           className="w-full h-auto max-h-full"
         />
         {error && <p className="text-red-500 mt-2">{error}</p>}
+        {isAIWatching && (
+          <div className="absolute top-4 right-4 bg-blue-500 text-white px-2 py-1 rounded">
+            AI is watching
+          </div>
+        )}
       </div>
       <div className="w-1/3 p-4 overflow-hidden">
         <CommentarySidebar
-          commentary={commentary}
+          commentary={showAIMessages ? commentary : commentary.filter(c => c.type !== 'ai')}
           onSendMessage={handleUserMessage}
+          showAIMessages={showAIMessages}
+          onToggleAIMessages={toggleAIMessages}
         />
       </div>
     </div>

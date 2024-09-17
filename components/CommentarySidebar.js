@@ -1,8 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
-export default function CommentarySidebar({ commentary, onSendMessage }) {
+export default function CommentarySidebar({
+  commentary,
+  onSendMessage,
+  showAIMessages,
+  onToggleAIMessages,
+}) {
   const chatBoxRef = useRef(null);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -14,18 +19,31 @@ export default function CommentarySidebar({ commentary, onSendMessage }) {
     e.preventDefault();
     if (message.trim()) {
       onSendMessage(message);
-      setMessage('');
+      setMessage("");
     }
   };
 
   return (
     <div className="bg-gray-100 h-full flex flex-col commentary">
+      <div className="p-4 bg-white border-b">
+        <h2 className="text-2xl font-bold mb-2">Live Chat</h2>
+        <button
+          onClick={onToggleAIMessages}
+          className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+        >
+          {showAIMessages ? "Hide AI Messages" : "Show AI Messages"}
+        </button>
+      </div>
       <div className="flex-grow overflow-y-auto p-4" ref={chatBoxRef}>
-        <h2 className="text-2xl font-bold mb-4">Live Chat</h2>
         <div className="space-y-4">
           {commentary.map((comment, index) => (
-            <div key={index} className={`p-3 rounded shadow ${comment.type === 'user' ? 'bg-blue-100 text-right' : 'bg-white'}`}>
-              <p className="text-sm text-gray-600">{comment.timestamp}</p>
+            <div
+              key={index}
+              className={`p-3 rounded shadow ${comment.type === "user" ? "bg-blue-100 text-right" : "bg-white"}`}
+            >
+              <p className="text-sm text-gray-600">
+                {new Date(comment.timestamp).toLocaleTimeString()}
+              </p>
               <p className="mt-1">{comment.text}</p>
             </div>
           ))}
