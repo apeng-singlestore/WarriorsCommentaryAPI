@@ -1,10 +1,22 @@
 import { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from "recharts";
 
+// Chart to display total number of commentaries
 const TotalCommentariesChart = ({ total }) => (
   <ResponsiveContainer width="100%" height={300}>
-    <BarChart data={[{ name: 'Total Commentaries', total }]}>
+    <BarChart data={[{ name: "Total Commentaries", total }]}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
       <YAxis />
@@ -15,10 +27,11 @@ const TotalCommentariesChart = ({ total }) => (
   </ResponsiveContainer>
 );
 
-const LatestCommentariesChart = ({ commentaries }) => {
-  const data = commentaries.map(c => ({
+// Chart to display latest commentaries
+const LatestCommentariesChart = ({ commentaries = [] }) => {
+  const data = commentaries.map((c) => ({
     timestamp: new Date(c.timestamp).toLocaleString(),
-    length: c.commentary.length
+    length: c.commentary.length,
   })).reverse();
 
   return (
@@ -52,6 +65,7 @@ export default function Analytics() {
     }
   };
 
+  // Fallback UI in case data is not available yet
   if (!analyticsData) {
     return (
       <Layout>
@@ -77,7 +91,9 @@ export default function Analytics() {
 
         <div className="bg-white p-6 rounded-lg shadow">
           <h2 className="text-2xl font-semibold mb-4">Latest Commentaries</h2>
-          <LatestCommentariesChart commentaries={analyticsData.latestCommentaries} />
+          <LatestCommentariesChart
+            commentaries={analyticsData.latestCommentaries || []}
+          />
           <table className="w-full mt-4">
             <thead>
               <tr className="bg-gray-100">
