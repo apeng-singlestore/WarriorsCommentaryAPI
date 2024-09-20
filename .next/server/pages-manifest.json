@@ -2,9 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/analytics": "pages/analytics.js",
-  "/api/analytics": "pages/api/analytics.js",
   "/": "pages/index.js",
-  "/api/commentary": "pages/api/commentary.js",
-  "/api/text-to-speech": "pages/api/text-to-speech.js"
+  "/analytics": "pages/analytics.js",
+  "/api/analytics": "pages/api/analytics.js"
 }
