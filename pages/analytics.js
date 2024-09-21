@@ -29,10 +29,12 @@ const TotalCommentariesChart = ({ total }) => (
 
 // Chart to display latest commentaries
 const LatestCommentariesChart = ({ commentaries = [] }) => {
-  const data = commentaries.map((c) => ({
-    timestamp: new Date(c.timestamp).toLocaleString(),
-    length: c.commentary.length,
-  })).reverse();
+  const data = commentaries
+    .map((c) => ({
+      timestamp: new Date(c.timestamp).toLocaleString(),
+      length: c.commentary.length,
+    }))
+    .reverse();
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -83,27 +85,30 @@ export default function Analytics() {
         <h1 className="text-3xl font-bold mb-6">Analytics Dashboard</h1>
 
         <div className="grid grid-cols-1 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
+          <div className="p-6 rounded-lg shadow">
             <h2 className="text-xl font-semibold mb-2">Total Commentaries</h2>
             <TotalCommentariesChart total={analyticsData.totalCommentaries} />
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="p-6 rounded-lg shadow">
           <h2 className="text-2xl font-semibold mb-4">Latest Commentaries</h2>
           <LatestCommentariesChart
             commentaries={analyticsData.latestCommentaries || []}
           />
           <table className="w-full mt-4">
             <thead>
-              <tr className="bg-gray-100">
+              <tr>
                 <th className="px-4 py-2 text-left">Timestamp</th>
                 <th className="px-4 py-2 text-left">Commentary</th>
               </tr>
             </thead>
             <tbody>
               {analyticsData?.latestCommentaries?.map((commentary, index) => (
-                <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : ""}>
+                <tr
+                  key={index}
+                  className={index % 2 === 0 ? "bg-gray-800" : ""}
+                >
                   <td className="px-4 py-2">
                     {new Date(commentary.timestamp).toLocaleString()}
                   </td>

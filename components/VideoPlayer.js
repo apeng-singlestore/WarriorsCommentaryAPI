@@ -11,13 +11,64 @@ export default function VideoPlayer({ videoSrc }) {
 
   useEffect(() => {
     const video = videoRef.current;
+    let rafId;
+    let lastCaptureTime = 0;
+
+    const captureFrame = (time) => {
+      if (time - lastCaptureTime >= 2000) {
+        // Capture every 5 seconds
+        if (video.readyState >= video.HAVE_CURRENT_DATA) {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas
+            .getContext("2d")
+            .drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          console.log("Capturing frame:", canvas.width, "x", canvas.height);
+
+          const imageData = canvas.toDataURL("image/jpeg");
+
+          fetch("/api/commentary", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              imageData,
+              width: canvas.width,
+              height: canvas.height,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Commentary generated:", data);
+              setCommentary((prevCommentary) => [
+                ...prevCommentary,
+                { ...data, type: "ai" },
+              ]);
+            })
+            .catch((error) => {
+              console.error("Error generating commentary:", error);
+              setError(
+                "Error generating commentary. Please check the console for details.",
+              );
+            });
+
+          lastCaptureTime = time;
+        }
+      }
+      rafId = requestAnimationFrame(captureFrame);
+    };
 
     const handlePlay = () => {
       console.log("Video playback started");
+      rafId = requestAnimationFrame(captureFrame);
     };
 
     const handlePause = () => {
       console.log("Video playback paused");
+      cancelAnimationFrame(rafId);
     };
 
     const handleError = (e) => {
@@ -33,6 +84,7 @@ export default function VideoPlayer({ videoSrc }) {
       video.removeEventListener("play", handlePlay);
       video.removeEventListener("pause", handlePause);
       video.removeEventListener("error", handleError);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -43,7 +95,9 @@ export default function VideoPlayer({ videoSrc }) {
       const video = videoRef.current;
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas
+        .getContext("2d")
+        .drawImage(video, 0, 0, canvas.width, canvas.height);
       const imageData = canvas.toDataURL("image/jpeg");
 
       const response = await fetch("/api/commentary", {
@@ -67,7 +121,9 @@ export default function VideoPlayer({ videoSrc }) {
       setIsAIWatching(false);
     } catch (error) {
       console.error("Error generating commentary:", error);
-      setError("Error generating commentary. Please check the console for details.");
+      setError(
+        "Error generating commentary. Please check the console for details.",
+      );
       setIsAIWatching(false);
     }
   };
@@ -87,7 +143,8 @@ export default function VideoPlayer({ videoSrc }) {
         body: JSON.stringify({ text }),
       });
 
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioContext = new (window.AudioContext ||
+        window.webkitAudioContext)();
       const audioSource = audioContext.createBufferSource();
 
       const arrayBuffer = await response.arrayBuffer();
@@ -106,6 +163,15 @@ export default function VideoPlayer({ videoSrc }) {
       video.muted = false; // Ensure video is unmuted if speech fails
       setIsSpeaking(false);
     }
+  };
+
+  const handleUserMessage = (message) => {
+    const userComment = {
+      timestamp: new Date().toISOString(),
+      text: message,
+      type: "user",
+    };
+    setCommentary((prevCommentary) => [...prevCommentary, userComment]);
   };
 
   return (
@@ -128,6 +194,7 @@ export default function VideoPlayer({ videoSrc }) {
           onGenerateCommentary={fetchCommentary}
           isAIWatching={isAIWatching}
           isSpeaking={isSpeaking}
+          onSendMessage={handleUserMessage}
         />
       </div>
     </div>
