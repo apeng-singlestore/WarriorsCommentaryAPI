@@ -22,6 +22,16 @@ export default function VideoPlayer({ videoSrc }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [analyticsData, setAnalyticsData] = useState(null);
 
+  const fetchLatestAnalytics = async () => {
+    try {
+      const response = await fetch('/api/analytics');
+      const data = await response.json();
+      setAnalyticsData(data);
+    } catch (error) {
+      console.error('Error fetching latest analytics:', error);
+    }
+  };
+
   useEffect(() => {
     const video = videoRef.current;
     let rafId;
@@ -56,10 +66,11 @@ export default function VideoPlayer({ videoSrc }) {
             .then((response) => response.json())
             .then((data) => {
               console.log("Commentary generated:", data);
-              setCommentary((prevCommentary) => [
-                ...prevCommentary,
-                { ...data, type: "ai" },
-              ]);
+              setCommentary((prevCommentary) => {
+                const newCommentary = [...prevCommentary, { ...data, type: "ai" }];
+                fetchLatestAnalytics();
+                return newCommentary;
+              });
               setIsAIWatching(false);
             })
             .catch((error) => {
@@ -96,27 +107,13 @@ export default function VideoPlayer({ videoSrc }) {
     video.addEventListener("pause", handlePause);
     video.addEventListener("error", handleError);
 
-    const fetchAnalyticsData = async () => {
-      try {
-        console.log("Fetching analytics data...");
-        const response = await fetch("/api/analytics");
-        const data = await response.json();
-        console.log("Received analytics data:", data);
-        setAnalyticsData(data);
-      } catch (error) {
-        console.error("Error fetching analytics data:", error);
-      }
-    };
-
-    fetchAnalyticsData();
-    const analyticsInterval = setInterval(fetchAnalyticsData, 30000);
+    fetchLatestAnalytics();
 
     return () => {
       video.removeEventListener("play", handlePlay);
       video.removeEventListener("pause", handlePause);
       video.removeEventListener("error", handleError);
       cancelAnimationFrame(rafId);
-      clearInterval(analyticsInterval);
     };
   }, []);
 
@@ -146,7 +143,11 @@ export default function VideoPlayer({ videoSrc }) {
 
       const data = await response.json();
       if (data.text) {
-        setCommentary((prev) => [...prev, { ...data, type: "ai" }]);
+        setCommentary((prev) => {
+          const newCommentary = [...prev, { ...data, type: "ai" }];
+          fetchLatestAnalytics();
+          return newCommentary;
+        });
         playSpeechFromServer(data.text);
       }
 
@@ -202,7 +203,11 @@ export default function VideoPlayer({ videoSrc }) {
       text: message,
       type: "user",
     };
-    setCommentary((prevCommentary) => [...prevCommentary, userComment]);
+    setCommentary((prevCommentary) => {
+      const newCommentary = [...prevCommentary, userComment];
+      fetchLatestAnalytics();
+      return newCommentary;
+    });
   };
 
   const TotalCommentariesChart = ({ total }) => (
