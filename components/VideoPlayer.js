@@ -1,5 +1,17 @@
 import { useRef, useEffect, useState } from "react";
 import CommentarySidebar from "./CommentarySidebar";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+} from "recharts";
 
 export default function VideoPlayer({ videoSrc }) {
   const videoRef = useRef(null);
@@ -8,6 +20,7 @@ export default function VideoPlayer({ videoSrc }) {
   const [showAIMessages, setShowAIMessages] = useState(true);
   const [isAIWatching, setIsAIWatching] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState(null);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -83,11 +96,27 @@ export default function VideoPlayer({ videoSrc }) {
     video.addEventListener("pause", handlePause);
     video.addEventListener("error", handleError);
 
+    const fetchAnalyticsData = async () => {
+      try {
+        console.log("Fetching analytics data...");
+        const response = await fetch("/api/analytics");
+        const data = await response.json();
+        console.log("Received analytics data:", data);
+        setAnalyticsData(data);
+      } catch (error) {
+        console.error("Error fetching analytics data:", error);
+      }
+    };
+
+    fetchAnalyticsData();
+    const analyticsInterval = setInterval(fetchAnalyticsData, 30000);
+
     return () => {
       video.removeEventListener("play", handlePlay);
       video.removeEventListener("pause", handlePause);
       video.removeEventListener("error", handleError);
       cancelAnimationFrame(rafId);
+      clearInterval(analyticsInterval);
     };
   }, []);
 
@@ -176,33 +205,87 @@ export default function VideoPlayer({ videoSrc }) {
     setCommentary((prevCommentary) => [...prevCommentary, userComment]);
   };
 
+  const TotalCommentariesChart = ({ total }) => (
+    <ResponsiveContainer width="100%" height={200}>
+      <BarChart data={[{ name: "Total Commentaries", total }]}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="total" fill="#8884d8" />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+
+  const LatestCommentariesChart = ({ commentaries = [] }) => {
+    const data = commentaries
+      .map((c) => ({
+        timestamp: new Date(c.timestamp).toLocaleString(),
+        length: c.commentary.length,
+      }))
+      .reverse();
+
+    return (
+      <ResponsiveContainer width="100%" height={200}>
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="timestamp" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="length" stroke="#8884d8" />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  };
+
   return (
-    <div className="main-container">
-      <div className="video-container p-4">
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          controls
-          crossOrigin="anonymous"
-          className="w-full h-auto max-h-full bg-black border border-gray-700"
-        />
-        {error && <p className="text-red-500 mt-2">{error}</p>}
-        {isAIWatching && (
-          <div className="absolute top-4 right-4 bg-gray-500 bg-opacity-50 text-white px-2 py-1 rounded animate-pulse">
-            AI is watching
-          </div>
-        )}
+    <div className="flex flex-col">
+      <div className="main-container">
+        <div className="video-container p-4 relative">
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            controls
+            crossOrigin="anonymous"
+            className="w-full h-auto max-h-full bg-black border border-gray-700"
+          />
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {isAIWatching && (
+            <div className="absolute top-4 right-4 bg-gray-500 bg-opacity-50 text-white px-2 py-1 rounded animate-pulse">
+              AI is watching
+            </div>
+          )}
+        </div>
+        <div className="sidebar-container p-4">
+          <CommentarySidebar
+            commentary={commentary}
+            showAIMessages={showAIMessages}
+            onToggleAIMessages={() => setShowAIMessages(!showAIMessages)}
+            onGenerateCommentary={fetchCommentary}
+            isAIWatching={isAIWatching}
+            isSpeaking={isSpeaking}
+            onSendMessage={handleUserMessage}
+          />
+        </div>
       </div>
-      <div className="sidebar-container p-4">
-        <CommentarySidebar
-          commentary={commentary}
-          showAIMessages={showAIMessages}
-          onToggleAIMessages={() => setShowAIMessages(!showAIMessages)}
-          onGenerateCommentary={fetchCommentary}
-          isAIWatching={isAIWatching}
-          isSpeaking={isSpeaking}
-          onSendMessage={handleUserMessage}
-        />
+      <div className="analytics-container mt-8 p-4 bg-black rounded-lg">
+        <h2 className="text-2xl font-bold mb-4 text-neon-green">Real-time Analytics</h2>
+        {analyticsData ? (
+          <>
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Total Commentaries</h3>
+              <TotalCommentariesChart total={analyticsData.totalCommentaries} />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Commentaries</h3>
+              <LatestCommentariesChart commentaries={analyticsData.latestCommentaries} />
+            </div>
+          </>
+        ) : (
+          <p className="text-white">Loading analytics data...</p>
+        )}
       </div>
     </div>
   );
