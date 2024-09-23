@@ -11,7 +11,13 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
+  AreaChart,
+  Area,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
+import { query } from "../lib/singleStoreClient";
 
 export default function VideoPlayer({ videoSrc }) {
   const videoRef = useRef(null);
@@ -21,14 +27,50 @@ export default function VideoPlayer({ videoSrc }) {
   const [isAIWatching, setIsAIWatching] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [analyticsData, setAnalyticsData] = useState(null);
+  const [dynamicGraph, setDynamicGraph] = useState(null);
 
   const fetchLatestAnalytics = async () => {
     try {
-      const response = await fetch('/api/analytics');
-      const data = await response.json();
-      setAnalyticsData(data);
+      const latestCommentaries = await query(`
+        SELECT timestamp, commentary
+        FROM commentary_data
+        ORDER BY timestamp DESC
+        LIMIT 10
+      `);
+
+      const totalCommentaries = await query(`
+        SELECT COUNT(*) AS total
+        FROM commentary_data
+      `);
+
+      setAnalyticsData({
+        latestCommentaries,
+        totalCommentaries: totalCommentaries[0]?.total || 0,
+      });
     } catch (error) {
       console.error('Error fetching latest analytics:', error);
+    }
+  };
+
+  const fetchDynamicGraph = async (question) => {
+    try {
+      const response = await fetch('/api/generate-graph', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch dynamic graph');
+      }
+
+      const graphConfig = await response.json();
+      setDynamicGraph(graphConfig);
+    } catch (error) {
+      console.error('Error fetching dynamic graph:', error);
+      setError('Failed to generate dynamic graph');
     }
   };
 
@@ -108,6 +150,7 @@ export default function VideoPlayer({ videoSrc }) {
     video.addEventListener("error", handleError);
 
     fetchLatestAnalytics();
+    fetchDynamicGraph("Show the trend of commentary lengths over time");
 
     return () => {
       video.removeEventListener("play", handlePlay);
@@ -245,6 +288,41 @@ export default function VideoPlayer({ videoSrc }) {
     );
   };
 
+  const DynamicGraph = ({ config }) => {
+    if (!config) return null;
+
+    const ChartComponent = {
+      BarChart,
+      LineChart,
+      AreaChart,
+      PieChart,
+    }[config.type];
+
+    if (!ChartComponent) return <p>Unsupported chart type</p>;
+
+    return (
+      <ResponsiveContainer width="100%" height={300}>
+        <ChartComponent data={config.data}>
+          {config.cartesianGrid && <CartesianGrid strokeDasharray="3 3" />}
+          {config.xAxis && <XAxis {...config.xAxis} />}
+          {config.yAxis && <YAxis {...config.yAxis} />}
+          <Tooltip />
+          <Legend />
+          {config.series.map((series, index) => {
+            const SeriesComponent = {
+              Bar,
+              Line,
+              Area,
+              Pie,
+            }[series.type];
+
+            return <SeriesComponent key={index} {...series.props} />;
+          })}
+        </ChartComponent>
+      </ResponsiveContainer>
+    );
+  };
+
   return (
     <div className="flex flex-col">
       <div className="main-container">
@@ -283,9 +361,13 @@ export default function VideoPlayer({ videoSrc }) {
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Total Commentaries</h3>
               <TotalCommentariesChart total={analyticsData.totalCommentaries} />
             </div>
-            <div>
+            <div className="mb-8">
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Commentaries</h3>
               <LatestCommentariesChart commentaries={analyticsData.latestCommentaries} />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Dynamic Graph</h3>
+              <DynamicGraph config={dynamicGraph} />
             </div>
           </>
         ) : (
