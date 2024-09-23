@@ -16,7 +16,6 @@ export default function VideoPlayer({ videoSrc }) {
 
     const captureFrame = (time) => {
       if (time - lastCaptureTime >= 2000) {
-        // Capture every 5 seconds
         if (video.readyState >= video.HAVE_CURRENT_DATA) {
           const canvas = document.createElement("canvas");
           canvas.width = video.videoWidth;
@@ -29,6 +28,7 @@ export default function VideoPlayer({ videoSrc }) {
 
           const imageData = canvas.toDataURL("image/jpeg");
 
+          setIsAIWatching(true);
           fetch("/api/commentary", {
             method: "POST",
             headers: {
@@ -47,12 +47,14 @@ export default function VideoPlayer({ videoSrc }) {
                 ...prevCommentary,
                 { ...data, type: "ai" },
               ]);
+              setIsAIWatching(false);
             })
             .catch((error) => {
               console.error("Error generating commentary:", error);
               setError(
                 "Error generating commentary. Please check the console for details.",
               );
+              setIsAIWatching(false);
             });
 
           lastCaptureTime = time;
@@ -69,6 +71,7 @@ export default function VideoPlayer({ videoSrc }) {
     const handlePause = () => {
       console.log("Video playback paused");
       cancelAnimationFrame(rafId);
+      setIsAIWatching(false);
     };
 
     const handleError = (e) => {
@@ -131,10 +134,9 @@ export default function VideoPlayer({ videoSrc }) {
   const playSpeechFromServer = async (text) => {
     setIsSpeaking(true);
     const video = videoRef.current;
-    video.muted = true; // Mute the video during speech playback
+    video.muted = true;
 
     try {
-      // Fetch the audio stream from our new API route
       const response = await fetch("/api/text-to-speech", {
         method: "POST",
         headers: {
@@ -155,12 +157,12 @@ export default function VideoPlayer({ videoSrc }) {
       });
 
       audioSource.onended = () => {
-        video.muted = false; // Unmute the video after speech finishes
+        video.muted = false;
         setIsSpeaking(false);
       };
     } catch (err) {
       console.error("Error playing speech from server:", err);
-      video.muted = false; // Ensure video is unmuted if speech fails
+      video.muted = false;
       setIsSpeaking(false);
     }
   };
@@ -185,6 +187,11 @@ export default function VideoPlayer({ videoSrc }) {
           className="w-full h-auto max-h-full bg-black border border-gray-700"
         />
         {error && <p className="text-red-500 mt-2">{error}</p>}
+        {isAIWatching && (
+          <div className="absolute top-4 right-4 bg-gray-500 bg-opacity-50 text-white px-2 py-1 rounded animate-pulse">
+            AI is watching
+          </div>
+        )}
       </div>
       <div className="sidebar-container p-4">
         <CommentarySidebar

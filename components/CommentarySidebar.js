@@ -28,11 +28,7 @@ export default function CommentarySidebar({
 
   return (
     <div className="commentary bg-black rounded-lg flex flex-col h-full">
-      {" "}
-      {/* Ensure bg-black is applied here */}
       <div className="p-4 bg-black border-b border-gray-600">
-        {" "}
-        {/* Changed from gray to black */}
         <h2 className="text-2xl font-bold mb-2 text-neon-green">Live Chat</h2>
         <button
           onClick={onToggleAIMessages}
@@ -42,22 +38,24 @@ export default function CommentarySidebar({
         </button>
       </div>
       <div className="flex-grow overflow-y-auto p-4 bg-black" ref={chatBoxRef}>
-        {" "}
-        {/* Ensure this is bg-black */}
         <div className="space-y-4">
           {commentary.map(
             (comment, index) =>
               (showAIMessages || comment.type !== "ai") && (
                 <div
                   key={index}
-                  className={`p-3 rounded shadow ${comment.type === "user" ? "bg-green-600 text-white text-right" : "bg-gray-700"}`}
+                  className={`p-3 rounded shadow ${
+                    comment.type === "user"
+                      ? "bg-green-600 text-white text-right"
+                      : "bg-gray-700"
+                  }`}
                 >
                   <p className="text-xs text-gray-400">
                     {new Date(comment.timestamp).toLocaleTimeString()}
                   </p>
                   <p className="mt-1">{comment.text}</p>
                 </div>
-              ),
+              )
           )}
         </div>
       </div>
@@ -65,8 +63,6 @@ export default function CommentarySidebar({
         onSubmit={handleSubmit}
         className="p-4 bg-black border-t border-gray-600 flex gap-2"
       >
-        {" "}
-        {/* Changed to bg-black */}
         <input
           type="text"
           value={message}
@@ -89,8 +85,8 @@ export default function CommentarySidebar({
           {isAIWatching
             ? "Generating..."
             : isSpeaking
-              ? "Speaking..."
-              : "Generate"}
+            ? "Speaking..."
+            : "Generate"}
         </button>
       </form>
     </div>
