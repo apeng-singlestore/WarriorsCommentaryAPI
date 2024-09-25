@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import CommentarySidebar from "./CommentarySidebar";
+import Draggable from 'react-draggable';
 import {
   BarChart,
   Bar,
@@ -11,13 +12,7 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
-  AreaChart,
-  Area,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
-import { query } from "../lib/singleStoreClient";
 
 export default function VideoPlayer({ videoSrc }) {
   const videoRef = useRef(null);
@@ -27,50 +22,14 @@ export default function VideoPlayer({ videoSrc }) {
   const [isAIWatching, setIsAIWatching] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [analyticsData, setAnalyticsData] = useState(null);
-  const [dynamicGraph, setDynamicGraph] = useState(null);
 
   const fetchLatestAnalytics = async () => {
     try {
-      const latestCommentaries = await query(`
-        SELECT timestamp, commentary
-        FROM commentary_data
-        ORDER BY timestamp DESC
-        LIMIT 10
-      `);
-
-      const totalCommentaries = await query(`
-        SELECT COUNT(*) AS total
-        FROM commentary_data
-      `);
-
-      setAnalyticsData({
-        latestCommentaries,
-        totalCommentaries: totalCommentaries[0]?.total || 0,
-      });
+      const response = await fetch('/api/analytics');
+      const data = await response.json();
+      setAnalyticsData(data);
     } catch (error) {
       console.error('Error fetching latest analytics:', error);
-    }
-  };
-
-  const fetchDynamicGraph = async (question) => {
-    try {
-      const response = await fetch('/api/generate-graph', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ question }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch dynamic graph');
-      }
-
-      const graphConfig = await response.json();
-      setDynamicGraph(graphConfig);
-    } catch (error) {
-      console.error('Error fetching dynamic graph:', error);
-      setError('Failed to generate dynamic graph');
     }
   };
 
@@ -150,7 +109,6 @@ export default function VideoPlayer({ videoSrc }) {
     video.addEventListener("error", handleError);
 
     fetchLatestAnalytics();
-    fetchDynamicGraph("Show the trend of commentary lengths over time");
 
     return () => {
       video.removeEventListener("play", handlePlay);
@@ -254,16 +212,18 @@ export default function VideoPlayer({ videoSrc }) {
   };
 
   const TotalCommentariesChart = ({ total }) => (
-    <ResponsiveContainer width="100%" height={200}>
-      <BarChart data={[{ name: "Total Commentaries", total }]}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="total" fill="#8884d8" />
-      </BarChart>
-    </ResponsiveContainer>
+    <div style={{ width: '300px', height: '200px' }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={[{ name: "Total Commentaries", total }]}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="total" fill="#8884d8" />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 
   const LatestCommentariesChart = ({ commentaries = [] }) => {
@@ -275,64 +235,31 @@ export default function VideoPlayer({ videoSrc }) {
       .reverse();
 
     return (
-      <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="length" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
-    );
-  };
-
-  const DynamicGraph = ({ config }) => {
-    if (!config) return null;
-
-    const ChartComponent = {
-      BarChart,
-      LineChart,
-      AreaChart,
-      PieChart,
-    }[config.type];
-
-    if (!ChartComponent) return <p>Unsupported chart type</p>;
-
-    return (
-      <ResponsiveContainer width="100%" height={300}>
-        <ChartComponent data={config.data}>
-          {config.cartesianGrid && <CartesianGrid strokeDasharray="3 3" />}
-          {config.xAxis && <XAxis {...config.xAxis} />}
-          {config.yAxis && <YAxis {...config.yAxis} />}
-          <Tooltip />
-          <Legend />
-          {config.series.map((series, index) => {
-            const SeriesComponent = {
-              Bar,
-              Line,
-              Area,
-              Pie,
-            }[series.type];
-
-            return <SeriesComponent key={index} {...series.props} />;
-          })}
-        </ChartComponent>
-      </ResponsiveContainer>
+      <div style={{ width: '300px', height: '200px' }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="timestamp" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="length" stroke="#8884d8" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     );
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="main-container">
-        <div className="video-container p-4 relative">
+    <div className="flex flex-col h-screen">
+      <div className="flex-grow flex">
+        <div className="w-2/3 p-4">
           <video
             ref={videoRef}
             src={videoSrc}
             controls
             crossOrigin="anonymous"
-            className="w-full h-auto max-h-full bg-black border border-gray-700"
+            className="w-full h-full object-cover bg-black border border-gray-700"
           />
           {error && <p className="text-red-500 mt-2">{error}</p>}
           {isAIWatching && (
@@ -341,7 +268,7 @@ export default function VideoPlayer({ videoSrc }) {
             </div>
           )}
         </div>
-        <div className="sidebar-container p-4">
+        <div className="w-1/3 p-4">
           <CommentarySidebar
             commentary={commentary}
             showAIMessages={showAIMessages}
@@ -353,26 +280,21 @@ export default function VideoPlayer({ videoSrc }) {
           />
         </div>
       </div>
-      <div className="analytics-container mt-8 p-4 bg-black rounded-lg">
-        <h2 className="text-2xl font-bold mb-4 text-neon-green">Real-time Analytics</h2>
-        {analyticsData ? (
-          <>
-            <div className="mb-8">
+      <div className="flex-shrink-0 h-1/3 bg-black p-4 overflow-x-auto">
+        <div className="flex space-x-4">
+          <Draggable>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Total Commentaries</h3>
-              <TotalCommentariesChart total={analyticsData.totalCommentaries} />
+              <TotalCommentariesChart total={analyticsData?.totalCommentaries || 0} />
             </div>
-            <div className="mb-8">
+          </Draggable>
+          <Draggable>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Commentaries</h3>
-              <LatestCommentariesChart commentaries={analyticsData.latestCommentaries} />
+              <LatestCommentariesChart commentaries={analyticsData?.latestCommentaries || []} />
             </div>
-            <div>
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">Dynamic Graph</h3>
-              <DynamicGraph config={dynamicGraph} />
-            </div>
-          </>
-        ) : (
-          <p className="text-white">Loading analytics data...</p>
-        )}
+          </Draggable>
+        </div>
       </div>
     </div>
   );
