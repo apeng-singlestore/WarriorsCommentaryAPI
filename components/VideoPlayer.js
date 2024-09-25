@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import CommentarySidebar from "./CommentarySidebar";
-import Draggable from 'react-draggable';
+import Draggable from "react-draggable";
 import {
   BarChart,
   Bar,
@@ -25,11 +25,11 @@ export default function VideoPlayer({ videoSrc }) {
 
   const fetchLatestAnalytics = async () => {
     try {
-      const response = await fetch('/api/analytics');
+      const response = await fetch("/api/analytics");
       const data = await response.json();
       setAnalyticsData(data);
     } catch (error) {
-      console.error('Error fetching latest analytics:', error);
+      console.error("Error fetching latest analytics:", error);
     }
   };
 
@@ -68,7 +68,10 @@ export default function VideoPlayer({ videoSrc }) {
             .then((data) => {
               console.log("Commentary generated:", data);
               setCommentary((prevCommentary) => {
-                const newCommentary = [...prevCommentary, { ...data, type: "ai" }];
+                const newCommentary = [
+                  ...prevCommentary,
+                  { ...data, type: "ai" },
+                ];
                 fetchLatestAnalytics();
                 return newCommentary;
               });
@@ -212,7 +215,7 @@ export default function VideoPlayer({ videoSrc }) {
   };
 
   const TotalCommentariesChart = ({ total }) => (
-    <div style={{ width: '300px', height: '200px' }}>
+    <div style={{ width: "300px", height: "200px" }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={[{ name: "Total Commentaries", total }]}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -235,7 +238,7 @@ export default function VideoPlayer({ videoSrc }) {
       .reverse();
 
     return (
-      <div style={{ width: '300px', height: '200px' }}>
+      <div style={{ width: "300px", height: "200px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -252,7 +255,7 @@ export default function VideoPlayer({ videoSrc }) {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex-grow flex">
+      <div className="flex flex-grow h-1/2">
         <div className="w-2/3 p-4">
           <video
             ref={videoRef}
@@ -284,14 +287,22 @@ export default function VideoPlayer({ videoSrc }) {
         <div className="flex space-x-4">
           <Draggable>
             <div className="bg-gray-800 p-4 rounded-lg cursor-move">
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">Total Commentaries</h3>
-              <TotalCommentariesChart total={analyticsData?.totalCommentaries || 0} />
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Total Commentaries
+              </h3>
+              <TotalCommentariesChart
+                total={analyticsData?.totalCommentaries || 0}
+              />
             </div>
           </Draggable>
           <Draggable>
             <div className="bg-gray-800 p-4 rounded-lg cursor-move">
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Commentaries</h3>
-              <LatestCommentariesChart commentaries={analyticsData?.latestCommentaries || []} />
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Latest Commentaries
+              </h3>
+              <LatestCommentariesChart
+                commentaries={analyticsData?.latestCommentaries || []}
+              />
             </div>
           </Draggable>
         </div>

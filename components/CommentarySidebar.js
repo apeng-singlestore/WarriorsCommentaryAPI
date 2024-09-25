@@ -55,7 +55,7 @@ export default function CommentarySidebar({
                   </p>
                   <p className="mt-1">{comment.text}</p>
                 </div>
-              )
+              ),
           )}
         </div>
       </div>
@@ -85,8 +85,8 @@ export default function CommentarySidebar({
           {isAIWatching
             ? "Generating..."
             : isSpeaking
-            ? "Speaking..."
-            : "Generate"}
+              ? "Speaking..."
+              : "Generate"}
         </button>
       </form>
     </div>
