@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import CommentarySidebar from "./CommentarySidebar";
-import Draggable from "react-draggable";
+import { Responsive, WidthProvider } from "react-grid-layout";
 import {
   BarChart,
   Bar,
@@ -14,6 +14,8 @@ import {
   Line,
 } from "recharts";
 
+const ResponsiveGridLayout = WidthProvider(Responsive);
+
 export default function VideoPlayer({ videoSrc }) {
   const videoRef = useRef(null);
   const [error, setError] = useState(null);
@@ -22,6 +24,10 @@ export default function VideoPlayer({ videoSrc }) {
   const [isAIWatching, setIsAIWatching] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [analyticsData, setAnalyticsData] = useState(null);
+  const [layout, setLayout] = useState([
+    { i: "totalCommentaries", x: 0, y: 0, w: 6, h: 2 },
+    { i: "latestCommentaries", x: 6, y: 0, w: 6, h: 2 },
+  ]);
 
   const fetchLatestAnalytics = async () => {
     try {
@@ -215,7 +221,7 @@ export default function VideoPlayer({ videoSrc }) {
   };
 
   const TotalCommentariesChart = ({ total }) => (
-    <div style={{ width: "300px", height: "200px" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={[{ name: "Total Commentaries", total }]}>
           <CartesianGrid strokeDasharray="3 3" />
@@ -238,7 +244,7 @@ export default function VideoPlayer({ videoSrc }) {
       .reverse();
 
     return (
-      <div style={{ width: "300px", height: "200px" }}>
+      <div style={{ width: "100%", height: "100%" }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -284,28 +290,31 @@ export default function VideoPlayer({ videoSrc }) {
         </div>
       </div>
       <div className="flex-shrink-0 h-1/3 bg-black p-4 overflow-x-auto">
-        <div className="flex space-x-4">
-          <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                Total Commentaries
-              </h3>
-              <TotalCommentariesChart
-                total={analyticsData?.totalCommentaries || 0}
-              />
-            </div>
-          </Draggable>
-          <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                Latest Commentaries
-              </h3>
-              <LatestCommentariesChart
-                commentaries={analyticsData?.latestCommentaries || []}
-              />
-            </div>
-          </Draggable>
-        </div>
+        <ResponsiveGridLayout
+          className="layout"
+          layouts={{ lg: layout }}
+          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+          cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+          rowHeight={100}
+          onLayoutChange={(newLayout) => setLayout(newLayout)}
+        >
+          <div key="totalCommentaries" className="bg-gray-800 p-4 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2 text-neon-green">
+              Total Commentaries
+            </h3>
+            <TotalCommentariesChart
+              total={analyticsData?.totalCommentaries || 0}
+            />
+          </div>
+          <div key="latestCommentaries" className="bg-gray-800 p-4 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2 text-neon-green">
+              Latest Commentaries
+            </h3>
+            <LatestCommentariesChart
+              commentaries={analyticsData?.latestCommentaries || []}
+            />
+          </div>
+        </ResponsiveGridLayout>
       </div>
     </div>
   );
