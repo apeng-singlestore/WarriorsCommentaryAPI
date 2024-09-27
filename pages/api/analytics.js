@@ -10,17 +10,35 @@ export default async function handler(req, res) {
 
       let timeFilter = "";
       switch (timeRange) {
-        case "30s":
-          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 30 SECOND)";
+        case "15min":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 15 MINUTE)";
           break;
-        case "1min":
-          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 MINUTE)";
+        case "30min":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)";
           break;
-        case "5min":
-          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)";
+        case "1hour":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 HOUR)";
           break;
-        case "10min":
-          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 10 MINUTE)";
+        case "3hours":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 3 HOUR)";
+          break;
+        case "6hours":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 6 HOUR)";
+          break;
+        case "12hours":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 12 HOUR)";
+          break;
+        case "day":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
+          break;
+        case "week":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 WEEK)";
+          break;
+        case "month":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+          break;
+        case "year":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 YEAR)";
           break;
         default:
           timeFilter = "";
