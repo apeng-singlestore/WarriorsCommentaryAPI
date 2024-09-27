@@ -10,6 +10,9 @@ export default async function handler(req, res) {
 
       let timeFilter = "";
       switch (timeRange) {
+        case "hour":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 HOUR)";
+          break;
         case "day":
           timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
           break;
@@ -18,6 +21,9 @@ export default async function handler(req, res) {
           break;
         case "month":
           timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+          break;
+        case "year":
+          timeFilter = "WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 1 YEAR)";
           break;
         default:
           timeFilter = "";

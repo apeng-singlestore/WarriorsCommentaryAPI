@@ -24,6 +24,7 @@ export default function VideoPlayer({ videoSrc }) {
   const [analyticsData, setAnalyticsData] = useState(null);
   const [userPrompt, setUserPrompt] = useState("");
   const [timeRange, setTimeRange] = useState("all");
+  const [enlargedChart, setEnlargedChart] = useState(null);
 
   const fetchLatestAnalytics = async () => {
     try {
@@ -292,6 +293,21 @@ export default function VideoPlayer({ videoSrc }) {
     );
   };
 
+  const ChartModal = ({ chart, onClose }) => {
+    if (!chart) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-gray-800 p-4 rounded-lg" style={{ width: '80%', height: '80%' }}>
+          <button onClick={onClose} className="absolute top-2 right-2 text-white">
+            Close
+          </button>
+          {chart}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <div className="flex flex-grow h-2/3">
@@ -341,9 +357,11 @@ export default function VideoPlayer({ videoSrc }) {
             className="w-full p-2 bg-gray-700 text-white rounded"
           >
             <option value="all">All Time</option>
+            <option value="hour">Last Hour</option>
             <option value="day">Last 24 Hours</option>
             <option value="week">Last Week</option>
             <option value="month">Last Month</option>
+            <option value="year">Last Year</option>
           </select>
         </div>
         <div className="mb-4 max-h-40 overflow-y-auto">
@@ -366,25 +384,35 @@ export default function VideoPlayer({ videoSrc }) {
         </div>
         <div className="flex flex-wrap justify-between">
           <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4" style={{ width: '300px', height: '250px' }}>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4" style={{ width: '30%', height: '250px' }}>
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Total Commentaries</h3>
               <TotalCommentariesChart commentaries={analyticsData?.commentariesOverTime || []} />
+              <button onClick={() => setEnlargedChart(<TotalCommentariesChart commentaries={analyticsData?.commentariesOverTime || []} />)} className="mt-2 bg-blue-500 text-white px-2 py-1 rounded">
+                Enlarge
+              </button>
             </div>
           </Draggable>
           <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4" style={{ width: '300px', height: '250px' }}>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4" style={{ width: '30%', height: '250px' }}>
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Latencies</h3>
               <LatestLatenciesChart latencies={analyticsData?.latestLatency || []} />
+              <button onClick={() => setEnlargedChart(<LatestLatenciesChart latencies={analyticsData?.latestLatency || []} />)} className="mt-2 bg-blue-500 text-white px-2 py-1 rounded">
+                Enlarge
+              </button>
             </div>
           </Draggable>
           <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4" style={{ width: '300px', height: '250px' }}>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4" style={{ width: '30%', height: '250px' }}>
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Commentaries</h3>
               <LatestCommentariesChart commentaries={analyticsData?.latestCommentaries || []} />
+              <button onClick={() => setEnlargedChart(<LatestCommentariesChart commentaries={analyticsData?.latestCommentaries || []} />)} className="mt-2 bg-blue-500 text-white px-2 py-1 rounded">
+                Enlarge
+              </button>
             </div>
           </Draggable>
         </div>
       </div>
+      <ChartModal chart={enlargedChart} onClose={() => setEnlargedChart(null)} />
     </div>
   );
 }
