@@ -25,7 +25,6 @@ export default function VideoPlayer({ videoSrc }) {
   const [userPrompt, setUserPrompt] = useState("");
   const [timeRange, setTimeRange] = useState("all");
   const [enlargedChart, setEnlargedChart] = useState(null);
-  const [showAnalytics, setShowAnalytics] = useState(true);
 
   const fetchLatestAnalytics = async () => {
     try {
@@ -407,160 +406,149 @@ export default function VideoPlayer({ videoSrc }) {
           />
         </div>
       </div>
-      <div className="flex-shrink-0 bg-black p-4">
-        <button
-          onClick={() => setShowAnalytics(!showAnalytics)}
-          className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-200"
-        >
-          {showAnalytics ? "Hide Analytics" : "Show Analytics"}
-        </button>
-        {showAnalytics && (
-          <div className="overflow-x-auto">
-            <div className="mb-4">
-              <select
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
-                className="w-full p-2 bg-gray-700 text-white rounded"
+      <div className="flex-shrink-0 h-1/2 bg-black p-4 overflow-x-auto">
+        <div className="mb-4">
+          <select
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value)}
+            className="w-full p-2 bg-gray-700 text-white rounded"
+          >
+            <option value="all">All Time</option>
+            <option value="30s">Last 30 Seconds</option>
+            <option value="1min">Last Minute</option>
+            <option value="5min">Last 5 Minutes</option>
+            <option value="10min">Last 10 Minutes</option>
+          </select>
+        </div>
+        <div className="flex flex-wrap justify-between">
+          <Draggable>
+            <div
+              className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
+              style={{ width: "30%", height: "250px" }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Total Commentaries
+              </h3>
+              <TotalCommentariesChart
+                commentaries={analyticsData?.commentariesOverTime || []}
+              />
+              <button
+                onClick={() =>
+                  setEnlargedChart(
+                    <TotalCommentariesChart
+                      commentaries={analyticsData?.commentariesOverTime || []}
+                    />,
+                  )
+                }
+                className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
               >
-                <option value="all">All Time</option>
-                <option value="hour">Last Hour</option>
-                <option value="day">Last 24 Hours</option>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
-              </select>
+                Enlarge
+              </button>
             </div>
-            <div className="flex flex-wrap justify-between">
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Total Commentaries
-                  </h3>
-                  <TotalCommentariesChart
-                    commentaries={analyticsData?.commentariesOverTime || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <TotalCommentariesChart
-                          commentaries={analyticsData?.commentariesOverTime || []}
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Latest Latencies
-                  </h3>
-                  <LatestLatenciesChart
-                    latencies={analyticsData?.latestLatency || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <LatestLatenciesChart
-                          latencies={analyticsData?.latestLatency || []}
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Latest Commentaries
-                  </h3>
-                  <LatestCommentariesChart
-                    commentaries={analyticsData?.latestCommentaries || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <LatestCommentariesChart
-                          commentaries={analyticsData?.latestCommentaries || []}
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Scores Over Time
-                  </h3>
-                  <ScoresOverTimeChart
-                    scoresData={analyticsData?.scoresOverTime || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <ScoresOverTimeChart
-                          scoresData={analyticsData?.scoresOverTime || []}
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Warriors Win Probability
-                  </h3>
-                  <WinProbabilityChart
-                    winProbabilityData={analyticsData?.winProbabilityOverTime || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <WinProbabilityChart
-                          winProbabilityData={
-                            analyticsData?.winProbabilityOverTime || []
-                          }
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
+          </Draggable>
+          <Draggable>
+            <div
+              className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
+              style={{ width: "30%", height: "250px" }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Latest Latencies
+              </h3>
+              <LatestLatenciesChart
+                latencies={analyticsData?.latestLatency || []}
+              />
+              <button
+                onClick={() =>
+                  setEnlargedChart(
+                    <LatestLatenciesChart
+                      latencies={analyticsData?.latestLatency || []}
+                    />,
+                  )
+                }
+                className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
+              >
+                Enlarge
+              </button>
             </div>
-          </div>
-        )}
+          </Draggable>
+          <Draggable>
+            <div
+              className="bg-gray-800 p-4 rounded-lg cursor-move mb-4"
+              style={{ width: "30%", height: "250px" }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Latest Commentaries
+              </h3>
+              <LatestCommentariesChart
+                commentaries={analyticsData?.latestCommentaries || []}
+              />
+              <button
+                onClick={() =>
+                  setEnlargedChart(
+                    <LatestCommentariesChart
+                      commentaries={analyticsData?.latestCommentaries || []}
+                    />,
+                  )
+                }
+                className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
+              >
+                Enlarge
+              </button>
+            </div>
+          </Draggable>
+          <Draggable>
+            <div
+              className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
+              style={{ width: "30%", height: "250px" }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Scores Over Time
+              </h3>
+              <ScoresOverTimeChart
+                scoresData={analyticsData?.scoresOverTime || []}
+              />
+              <button
+                onClick={() =>
+                  setEnlargedChart(
+                    <ScoresOverTimeChart
+                      scoresData={analyticsData?.scoresOverTime || []}
+                    />,
+                  )
+                }
+                className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
+              >
+                Enlarge
+              </button>
+            </div>
+          </Draggable>
+          <Draggable>
+            <div
+              className="bg-gray-800 p-4 rounded-lg cursor-move mb-4"
+              style={{ width: "30%", height: "250px" }}
+            >
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Warriors Win Probability
+              </h3>
+              <WinProbabilityChart
+                winProbabilityData={analyticsData?.winProbabilityOverTime || []}
+              />
+              <button
+                onClick={() =>
+                  setEnlargedChart(
+                    <WinProbabilityChart
+                      winProbabilityData={
+                        analyticsData?.winProbabilityOverTime || []
+                      }
+                    />,
+                  )
+                }
+                className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
+              >
+                Enlarge
+              </button>
+            </div>
+          </Draggable>
+        </div>
       </div>
       <ChartModal
         chart={enlargedChart}
