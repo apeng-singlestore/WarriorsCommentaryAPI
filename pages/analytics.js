@@ -52,6 +52,7 @@ const LatestCommentariesChart = ({ commentaries = [] }) => {
 
 export default function Analytics() {
   const [analyticsData, setAnalyticsData] = useState(null);
+  const [userPrompt, setUserPrompt] = useState("");
 
   useEffect(() => {
     fetchAnalyticsData();
@@ -59,7 +60,7 @@ export default function Analytics() {
 
   const fetchAnalyticsData = async () => {
     try {
-      const response = await fetch("/api/analytics");
+      const response = await fetch(`/api/analytics?userPrompt=${userPrompt}`);
       const data = await response.json();
       setAnalyticsData(data);
     } catch (error) {
@@ -94,7 +95,17 @@ export default function Analytics() {
         <div className="p-6 rounded-lg shadow">
           <h2 className="text-2xl font-semibold mb-4">Latest Commentaries</h2>
           <LatestCommentariesChart
-            commentaries={analyticsData.latestCommentaries || []}
+            commentaries={analyticsData.similaritySearch || []}
+          />
+          <input
+            type="text"
+            value={userPrompt}
+            onChange={(e) => {
+              setUserPrompt(e.target.value);
+              fetchAnalyticsData();
+            }}
+            placeholder="Enter your prompt"
+            className="input-class"
           />
           <table className="w-full mt-4">
             <thead>
@@ -104,17 +115,19 @@ export default function Analytics() {
               </tr>
             </thead>
             <tbody>
-              {analyticsData?.latestCommentaries?.map((commentary, index) => (
-                <tr
-                  key={index}
-                  className={index % 2 === 0 ? "bg-gray-800" : ""}
-                >
-                  <td className="px-4 py-2">
-                    {new Date(commentary.timestamp).toLocaleString()}
-                  </td>
-                  <td className="px-4 py-2">{commentary.commentary}</td>
-                </tr>
-              ))}
+              {analyticsData?.similaritySearch?.map(
+                (commentary, index) => (
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "bg-gray-800" : ""}
+                  >
+                    <td className="px-4 py-2">
+                      {new Date(commentary.timestamp).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-2">{commentary.commentary}</td>
+                  </tr>
+                ),
+              )}
             </tbody>
           </table>
         </div>

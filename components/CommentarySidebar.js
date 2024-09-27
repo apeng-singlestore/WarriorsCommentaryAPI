@@ -8,6 +8,7 @@ export default function CommentarySidebar({
   onGenerateCommentary,
   isAIWatching,
   isSpeaking,
+  
 }) {
   const chatBoxRef = useRef(null);
   const [message, setMessage] = useState("");

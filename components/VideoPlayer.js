@@ -22,10 +22,11 @@ export default function VideoPlayer({ videoSrc }) {
   const [isAIWatching, setIsAIWatching] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [analyticsData, setAnalyticsData] = useState(null);
+  const [userPrompt, setUserPrompt] = useState("");
 
   const fetchLatestAnalytics = async () => {
     try {
-      const response = await fetch("/api/analytics");
+      const response = await fetch(`/api/analytics?userPrompt=${userPrompt}`);
       const data = await response.json();
       setAnalyticsData(data);
     } catch (error) {
@@ -34,6 +35,8 @@ export default function VideoPlayer({ videoSrc }) {
   };
 
   useEffect(() => {
+    fetchLatestAnalytics();
+
     const video = videoRef.current;
     let rafId;
     let lastCaptureTime = 0;
@@ -229,6 +232,35 @@ export default function VideoPlayer({ videoSrc }) {
     </div>
   );
 
+  const LatestLatenciesChart = ({ latencies = [] }) => {
+    const data = latencies
+      .map((c) => ({
+        timestamp: new Date(c.timestamp).toLocaleString(),
+        latency: c.latency,
+      }))
+      .reverse();
+
+    return (
+      <div style={{ width: "300px", height: "200px" }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="timestamp" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line
+              type="monotone"
+              dataKey="latency"
+              stroke="#8884d8"
+              isAnimationActive={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  };
+
   const LatestCommentariesChart = ({ commentaries = [] }) => {
     const data = commentaries
       .map((c) => ({
@@ -246,7 +278,12 @@ export default function VideoPlayer({ videoSrc }) {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="length" stroke="#8884d8" />
+            <Line
+              type="monotone"
+              dataKey="length"
+              stroke="#8884d8"
+              isAnimationActive={false}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -285,6 +322,39 @@ export default function VideoPlayer({ videoSrc }) {
       </div>
       <div className="flex-shrink-0 h-1/3 bg-black p-4 overflow-x-auto">
         <div className="flex space-x-4">
+          <input
+            type="text"
+            value={userPrompt}
+            onChange={(e) => {
+              setUserPrompt(e.target.value);
+              fetchLatestAnalytics();
+            }}
+            placeholder="Enter your prompt"
+            className="input-class h-1/2"
+          />
+          <table className="w-full mt-4 h-1/2">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 text-left">Timestamp</th>
+                <th className="px-4 py-2 text-left">Commentary</th>
+              </tr>
+            </thead>
+            <tbody>
+              {analyticsData?.similaritySearch?.map((commentary, index) => (
+                <tr
+                  key={index}
+                  className={index % 2 === 0 ? "bg-gray-800" : ""}
+                >
+                  <td className="px-4 py-2">
+                    {new Date(commentary.timestamp).toLocaleString()}
+                  </td>
+                  <td className="px-4 py-2">{commentary.commentary}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="">
           <Draggable>
             <div className="bg-gray-800 p-4 rounded-lg cursor-move">
               <h3 className="text-xl font-semibold mb-2 text-neon-green">
@@ -292,6 +362,16 @@ export default function VideoPlayer({ videoSrc }) {
               </h3>
               <TotalCommentariesChart
                 total={analyticsData?.totalCommentaries || 0}
+              />
+            </div>
+          </Draggable>
+          <Draggable>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">
+                Latest Latencies
+              </h3>
+              <LatestLatenciesChart
+                latencies={analyticsData?.latestLatency || []}
               />
             </div>
           </Draggable>

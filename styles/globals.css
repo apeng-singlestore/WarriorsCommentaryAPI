@@ -168,3 +168,7 @@ button.send:hover {
 .border-gray-600 {
   border-color: #4b5563;
 }
+
+.Line {
+  isAnimationActive: false;
+}

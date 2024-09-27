@@ -1,9 +1,25 @@
-import { query } from "../../lib/singleStoreClient";
+import { query, initializeDatabase } from "../../lib/singleStoreClient";
 
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
+      const { userPrompt } = req.query;
+
+      const commentaryTable = await initializeDatabase();
       console.log("Fetching analytics data from SingleStore...");
+
+      const vectorSearch = await commentaryTable.vectorSearch(
+        {
+          prompt: userPrompt || "warriors",
+          vectorColumn: "embedding",
+        },
+        {
+          select: ["commentary", "timestamp"],
+          limit: 10,
+        },
+      );
+
+      console.log("Similarity search performed with prompt:", vectorSearch);
 
       // Fetch the last 10 commentary entries
       const latestCommentaries = await query(`
@@ -14,6 +30,15 @@ export default async function handler(req, res) {
       `);
 
       console.log("Fetched latest commentaries:", latestCommentaries);
+
+      const latestLatency = await query(`
+        SELECT timestamp, latency
+        FROM commentary_data
+        ORDER BY timestamp DESC
+        LIMIT 10
+      `);
+
+      console.log("Fetched latest latency:", latestLatency);
 
       // Calculate total commentaries
       const totalCommentaries = await query(`
@@ -26,6 +51,8 @@ export default async function handler(req, res) {
       const analyticsData = {
         latestCommentaries,
         totalCommentaries: totalCommentaries[0]?.total || 0,
+        latestLatency,
+        similaritySearch: vectorSearch,
       };
 
       res.status(200).json(analyticsData);
