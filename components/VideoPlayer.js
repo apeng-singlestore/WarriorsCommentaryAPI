@@ -423,11 +423,10 @@ export default function VideoPlayer({ videoSrc }) {
                 className="w-full p-2 bg-gray-700 text-white rounded"
               >
                 <option value="all">All Time</option>
-                <option value="hour">Last Hour</option>
-                <option value="day">Last 24 Hours</option>
-                <option value="week">Last Week</option>
-                <option value="month">Last Month</option>
-                <option value="year">Last Year</option>
+                <option value="30s">Last 30 Seconds</option>
+                <option value="1min">Last Minute</option>
+                <option value="5min">Last 5 Minutes</option>
+                <option value="10min">Last 10 Minutes</option>
               </select>
             </div>
             <div className="flex flex-wrap justify-between">
@@ -446,7 +445,9 @@ export default function VideoPlayer({ videoSrc }) {
                     onClick={() =>
                       setEnlargedChart(
                         <TotalCommentariesChart
-                          commentaries={analyticsData?.commentariesOverTime || []}
+                          commentaries={
+                            analyticsData?.commentariesOverTime || []
+                          }
                         />,
                       )
                     }
@@ -540,7 +541,9 @@ export default function VideoPlayer({ videoSrc }) {
                     Warriors Win Probability
                   </h3>
                   <WinProbabilityChart
-                    winProbabilityData={analyticsData?.winProbabilityOverTime || []}
+                    winProbabilityData={
+                      analyticsData?.winProbabilityOverTime || []
+                    }
                   />
                   <button
                     onClick={() =>
