@@ -23,10 +23,11 @@ export default function VideoPlayer({ videoSrc }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [analyticsData, setAnalyticsData] = useState(null);
   const [userPrompt, setUserPrompt] = useState("");
+  const [timeRange, setTimeRange] = useState("all");
 
   const fetchLatestAnalytics = async () => {
     try {
-      const response = await fetch(`/api/analytics?userPrompt=${userPrompt}`);
+      const response = await fetch(`/api/analytics?userPrompt=${userPrompt}&timeRange=${timeRange}`);
       const data = await response.json();
       setAnalyticsData(data);
     } catch (error) {
@@ -122,7 +123,7 @@ export default function VideoPlayer({ videoSrc }) {
       video.removeEventListener("error", handleError);
       cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [timeRange]);
 
   const fetchCommentary = async () => {
     try {
@@ -217,20 +218,25 @@ export default function VideoPlayer({ videoSrc }) {
     });
   };
 
-  const TotalCommentariesChart = ({ total }) => (
-    <div style={{ width: "300px", height: "200px" }}>
+  const TotalCommentariesChart = ({ commentaries }) => {
+    const data = commentaries.map((c) => ({
+      date: new Date(c.date).toLocaleDateString(),
+      count: c.count,
+    }));
+
+    return (
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={[{ name: "Total Commentaries", total }]}>
+        <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="date" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="total" fill="#8884d8" />
-        </BarChart>
+          <Line type="monotone" dataKey="count" stroke="#8884d8" />
+        </LineChart>
       </ResponsiveContainer>
-    </div>
-  );
+    );
+  };
 
   const LatestLatenciesChart = ({ latencies = [] }) => {
     const data = latencies
@@ -241,23 +247,21 @@ export default function VideoPlayer({ videoSrc }) {
       .reverse();
 
     return (
-      <div style={{ width: "300px", height: "200px" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="timestamp" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="latency"
-              stroke="#8884d8"
-              isAnimationActive={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="timestamp" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="latency"
+            stroke="#8884d8"
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     );
   };
 
@@ -270,29 +274,27 @@ export default function VideoPlayer({ videoSrc }) {
       .reverse();
 
     return (
-      <div style={{ width: "300px", height: "200px" }}>
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="timestamp" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="length"
-              stroke="#8884d8"
-              isAnimationActive={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="timestamp" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="length"
+            stroke="#8884d8"
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     );
   };
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex flex-grow h-1/2">
+      <div className="flex flex-grow h-2/3">
         <div className="w-2/3 p-4">
           <video
             ref={videoRef}
@@ -321,7 +323,8 @@ export default function VideoPlayer({ videoSrc }) {
         </div>
       </div>
       <div className="flex-shrink-0 h-1/3 bg-black p-4 overflow-x-auto">
-        <div className="flex space-x-4">
+        <div className="mb-4">
+          <h3 className="text-xl font-semibold mb-2 text-neon-green">Vector Search</h3>
           <input
             type="text"
             value={userPrompt}
@@ -330,9 +333,21 @@ export default function VideoPlayer({ videoSrc }) {
               fetchLatestAnalytics();
             }}
             placeholder="Enter your prompt"
-            className="input-class h-1/2"
+            className="w-full p-2 bg-gray-700 text-white rounded mb-2"
           />
-          <table className="w-full mt-4 h-1/2">
+          <select
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value)}
+            className="w-full p-2 bg-gray-700 text-white rounded"
+          >
+            <option value="all">All Time</option>
+            <option value="day">Last 24 Hours</option>
+            <option value="week">Last Week</option>
+            <option value="month">Last Month</option>
+          </select>
+        </div>
+        <div className="mb-4 max-h-40 overflow-y-auto">
+          <table className="w-full">
             <thead>
               <tr>
                 <th className="px-4 py-2 text-left">Timestamp</th>
@@ -341,48 +356,31 @@ export default function VideoPlayer({ videoSrc }) {
             </thead>
             <tbody>
               {analyticsData?.similaritySearch?.map((commentary, index) => (
-                <tr
-                  key={index}
-                  className={index % 2 === 0 ? "bg-gray-800" : ""}
-                >
-                  <td className="px-4 py-2">
-                    {new Date(commentary.timestamp).toLocaleString()}
-                  </td>
+                <tr key={index} className={index % 2 === 0 ? "bg-gray-800" : ""}>
+                  <td className="px-4 py-2">{new Date(commentary.timestamp).toLocaleString()}</td>
                   <td className="px-4 py-2">{commentary.commentary}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className="">
+        <div className="flex flex-wrap justify-between">
           <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                Total Commentaries
-              </h3>
-              <TotalCommentariesChart
-                total={analyticsData?.totalCommentaries || 0}
-              />
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4" style={{ width: '300px', height: '250px' }}>
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Total Commentaries</h3>
+              <TotalCommentariesChart commentaries={analyticsData?.commentariesOverTime || []} />
             </div>
           </Draggable>
           <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                Latest Latencies
-              </h3>
-              <LatestLatenciesChart
-                latencies={analyticsData?.latestLatency || []}
-              />
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4" style={{ width: '300px', height: '250px' }}>
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Latencies</h3>
+              <LatestLatenciesChart latencies={analyticsData?.latestLatency || []} />
             </div>
           </Draggable>
           <Draggable>
-            <div className="bg-gray-800 p-4 rounded-lg cursor-move">
-              <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                Latest Commentaries
-              </h3>
-              <LatestCommentariesChart
-                commentaries={analyticsData?.latestCommentaries || []}
-              />
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4" style={{ width: '300px', height: '250px' }}>
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Commentaries</h3>
+              <LatestCommentariesChart commentaries={analyticsData?.latestCommentaries || []} />
             </div>
           </Draggable>
         </div>
