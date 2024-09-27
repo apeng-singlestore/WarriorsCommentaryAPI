@@ -27,11 +27,6 @@ const nextConfig = {
     });
     return config;
   },
-  // Add the following lines to ensure the server listens on all interfaces
-  server: {
-    host: '0.0.0.0',
-    port: 3001,
-  },
 };
 
 module.exports = nextConfig;
