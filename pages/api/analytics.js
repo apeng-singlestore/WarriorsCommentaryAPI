@@ -84,12 +84,34 @@ export default async function handler(req, res) {
 
       console.log("Total commentaries:", totalCommentaries);
 
+      // Fetch scores over time
+      const scoresOverTime = await query(`
+        SELECT timestamp, warriors_score, cavaliers_score
+        FROM commentary_data
+        ${timeFilter}
+        ORDER BY timestamp
+      `);
+
+      console.log("Fetched scores over time:", scoresOverTime);
+
+      // Fetch win probability over time
+      const winProbabilityOverTime = await query(`
+        SELECT timestamp, win_probability
+        FROM commentary_data
+        ${timeFilter}
+        ORDER BY timestamp
+      `);
+
+      console.log("Fetched win probability over time:", winProbabilityOverTime);
+
       const analyticsData = {
         latestCommentaries,
         totalCommentaries: totalCommentaries[0]?.total || 0,
         latestLatency,
         similaritySearch: vectorSearch,
         commentariesOverTime,
+        scoresOverTime,
+        winProbabilityOverTime,
       };
 
       res.status(200).json(analyticsData);

@@ -293,6 +293,48 @@ export default function VideoPlayer({ videoSrc }) {
     );
   };
 
+  const ScoresOverTimeChart = ({ scoresData = [] }) => {
+    const data = scoresData.map((s) => ({
+      timestamp: new Date(s.timestamp).toLocaleString(),
+      warriorsScore: s.warriors_score,
+      cavaliersScore: s.cavaliers_score,
+    }));
+
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="timestamp" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="warriorsScore" stroke="#1D428A" name="Warriors" isAnimationActive={false} />
+          <Line type="monotone" dataKey="cavaliersScore" stroke="#860038" name="Cavaliers" isAnimationActive={false} />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  };
+
+  const WinProbabilityChart = ({ winProbabilityData = [] }) => {
+    const data = winProbabilityData.map((wp) => ({
+      timestamp: new Date(wp.timestamp).toLocaleString(),
+      winProbability: wp.win_probability,
+    }));
+
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="timestamp" />
+          <YAxis domain={[0, 100]} />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="winProbability" stroke="#00FF00" name="Warriors Win Probability %" isAnimationActive={false} />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  };
+
   const ChartModal = ({ chart, onClose }) => {
     if (!chart) return null;
 
@@ -406,6 +448,24 @@ export default function VideoPlayer({ videoSrc }) {
               <h3 className="text-xl font-semibold mb-2 text-neon-green">Latest Commentaries</h3>
               <LatestCommentariesChart commentaries={analyticsData?.latestCommentaries || []} />
               <button onClick={() => setEnlargedChart(<LatestCommentariesChart commentaries={analyticsData?.latestCommentaries || []} />)} className="mt-2 bg-blue-500 text-white px-2 py-1 rounded">
+                Enlarge
+              </button>
+            </div>
+          </Draggable>
+          <Draggable>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4" style={{ width: '30%', height: '250px' }}>
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Scores Over Time</h3>
+              <ScoresOverTimeChart scoresData={analyticsData?.scoresOverTime || []} />
+              <button onClick={() => setEnlargedChart(<ScoresOverTimeChart scoresData={analyticsData?.scoresOverTime || []} />)} className="mt-2 bg-blue-500 text-white px-2 py-1 rounded">
+                Enlarge
+              </button>
+            </div>
+          </Draggable>
+          <Draggable>
+            <div className="bg-gray-800 p-4 rounded-lg cursor-move mb-4" style={{ width: '30%', height: '250px' }}>
+              <h3 className="text-xl font-semibold mb-2 text-neon-green">Warriors Win Probability</h3>
+              <WinProbabilityChart winProbabilityData={analyticsData?.winProbabilityOverTime || []} />
+              <button onClick={() => setEnlargedChart(<WinProbabilityChart winProbabilityData={analyticsData?.winProbabilityOverTime || []} />)} className="mt-2 bg-blue-500 text-white px-2 py-1 rounded">
                 Enlarge
               </button>
             </div>
