@@ -1,18 +1,17 @@
-import { useRef, useEffect, useState } from "react";
-import CommentarySidebar from "./CommentarySidebar";
-import Draggable from "react-draggable";
+// components/VideoPlayer.js
+
+import { useRef, useEffect, useState, useCallback } from 'react';
+import CommentarySidebar from './CommentarySidebar';
 import {
-  BarChart,
-  Bar,
+  LineChart,
+  Line,
+  CartesianGrid,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
-} from "recharts";
+} from 'recharts';
 
 export default function VideoPlayer({ videoSrc }) {
   const videoRef = useRef(null);
@@ -20,131 +19,92 @@ export default function VideoPlayer({ videoSrc }) {
   const [commentary, setCommentary] = useState([]);
   const [showAIMessages, setShowAIMessages] = useState(true);
   const [isAIWatching, setIsAIWatching] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [analyticsData, setAnalyticsData] = useState(null);
-  const [userPrompt, setUserPrompt] = useState("");
-  const [timeRange, setTimeRange] = useState("all");
-  const [enlargedChart, setEnlargedChart] = useState(null);
+  const [analyticsData, setAnalyticsData] = useState({});
   const [showAnalytics, setShowAnalytics] = useState(true);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const commentaryIntervalRef = useRef(null);
 
-  const fetchLatestAnalytics = async () => {
+  const fetchLatestAnalytics = useCallback(async () => {
     try {
-      const response = await fetch(
-        `/api/analytics?userPrompt=${userPrompt}&timeRange=${timeRange}`,
-      );
+      const response = await fetch('/api/analytics');
       const data = await response.json();
       setAnalyticsData(data);
     } catch (error) {
-      console.error("Error fetching latest analytics:", error);
+      console.error('Error fetching latest analytics:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchLatestAnalytics();
+    const intervalId = setInterval(() => {
+      fetchLatestAnalytics();
+    }, 2000); // Fetch analytics every 2 seconds
 
+    return () => clearInterval(intervalId);
+  }, [fetchLatestAnalytics]);
+
+  // Function to start commentary fetching interval
+  const startCommentaryInterval = useCallback(() => {
+    if (!commentaryIntervalRef.current) {
+      commentaryIntervalRef.current = setInterval(() => {
+        fetchCommentary();
+      }, 2000);
+    }
+  }, []);
+
+  // Function to stop commentary fetching interval
+  const stopCommentaryInterval = useCallback(() => {
+    if (commentaryIntervalRef.current) {
+      clearInterval(commentaryIntervalRef.current);
+      commentaryIntervalRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
     const video = videoRef.current;
-    let rafId;
-    let lastCaptureTime = 0;
+    if (video) {
+      const handlePlay = () => {
+        setIsVideoPlaying(true);
+        startCommentaryInterval();
+      };
 
-    const captureFrame = (time) => {
-      if (time - lastCaptureTime >= 2000) {
-        if (video.readyState >= video.HAVE_CURRENT_DATA) {
-          const canvas = document.createElement("canvas");
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-          canvas
-            .getContext("2d")
-            .drawImage(video, 0, 0, canvas.width, canvas.height);
+      const handlePause = () => {
+        setIsVideoPlaying(false);
+        stopCommentaryInterval();
+      };
 
-          console.log("Capturing frame:", canvas.width, "x", canvas.height);
+      video.addEventListener('play', handlePlay);
+      video.addEventListener('playing', handlePlay);
+      video.addEventListener('pause', handlePause);
+      video.addEventListener('ended', handlePause);
 
-          const imageData = canvas.toDataURL("image/jpeg");
+      // Cleanup event listeners on component unmount
+      return () => {
+        video.removeEventListener('play', handlePlay);
+        video.removeEventListener('playing', handlePlay);
+        video.removeEventListener('pause', handlePause);
+        video.removeEventListener('ended', handlePause);
+        stopCommentaryInterval();
+      };
+    }
+  }, [startCommentaryInterval, stopCommentaryInterval]);
 
-          setIsAIWatching(true);
-          fetch("/api/commentary", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              imageData,
-              width: canvas.width,
-              height: canvas.height,
-            }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("Commentary generated:", data);
-              setCommentary((prevCommentary) => {
-                const newCommentary = [
-                  ...prevCommentary,
-                  { ...data, type: "ai" },
-                ];
-                fetchLatestAnalytics();
-                return newCommentary;
-              });
-              setIsAIWatching(false);
-            })
-            .catch((error) => {
-              console.error("Error generating commentary:", error);
-              setError(
-                "Error generating commentary. Please check the console for details.",
-              );
-              setIsAIWatching(false);
-            });
-
-          lastCaptureTime = time;
-        }
-      }
-      rafId = requestAnimationFrame(captureFrame);
-    };
-
-    const handlePlay = () => {
-      console.log("Video playback started");
-      rafId = requestAnimationFrame(captureFrame);
-    };
-
-    const handlePause = () => {
-      console.log("Video playback paused");
-      cancelAnimationFrame(rafId);
-      setIsAIWatching(false);
-    };
-
-    const handleError = (e) => {
-      console.error("Video error:", e);
-      setError("Error loading video. Please check the video source.");
-    };
-
-    video.addEventListener("play", handlePlay);
-    video.addEventListener("pause", handlePause);
-    video.addEventListener("error", handleError);
-
-    fetchLatestAnalytics();
-
-    return () => {
-      video.removeEventListener("play", handlePlay);
-      video.removeEventListener("pause", handlePause);
-      video.removeEventListener("error", handleError);
-      cancelAnimationFrame(rafId);
-    };
-  }, [timeRange]);
-
-  const fetchCommentary = async () => {
+  const fetchCommentary = useCallback(async () => {
     try {
       setIsAIWatching(true);
-      const canvas = document.createElement("canvas");
+      const canvas = document.createElement('canvas');
       const video = videoRef.current;
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       canvas
-        .getContext("2d")
+        .getContext('2d')
         .drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL("image/jpeg");
+      const imageData = canvas.toDataURL('image/jpeg');
 
-      const response = await fetch("/api/commentary", {
-        method: "POST",
+      const response = await fetch('/api/commentary', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           imageData,
@@ -154,421 +114,298 @@ export default function VideoPlayer({ videoSrc }) {
       });
 
       const data = await response.json();
+
       if (data.text) {
-        setCommentary((prev) => {
-          const newCommentary = [...prev, { ...data, type: "ai" }];
-          fetchLatestAnalytics();
-          return newCommentary;
-        });
-        playSpeechFromServer(data.text);
+        setCommentary((prev) => [
+          ...prev,
+          {
+            timestamp: data.timestamp || new Date().toISOString(),
+            text: data.text,
+            type: 'ai',
+          },
+        ]);
+      } else {
+        console.error('No commentary text received from API.');
+        setError('No commentary received. Please try again.');
       }
 
       setIsAIWatching(false);
     } catch (error) {
-      console.error("Error generating commentary:", error);
+      console.error('Error generating commentary:', error);
       setError(
-        "Error generating commentary. Please check the console for details.",
+        'Error generating commentary. Please check the console for details.'
       );
       setIsAIWatching(false);
     }
-  };
+  }, []);
 
-  const playSpeechFromServer = async (text) => {
-    setIsSpeaking(true);
-    const video = videoRef.current;
-    video.muted = true;
+  // Define the onSendMessage function to handle user messages
+  const onSendMessage = useCallback((message) => {
+    setCommentary((prev) => [
+      ...prev,
+      {
+        timestamp: new Date().toISOString(),
+        text: message,
+        type: 'user',
+      },
+    ]);
+  }, []);
 
-    try {
-      const response = await fetch("/api/text-to-speech", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text }),
-      });
-
-      const audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)();
-      const audioSource = audioContext.createBufferSource();
-
-      const arrayBuffer = await response.arrayBuffer();
-      audioContext.decodeAudioData(arrayBuffer, (decodedData) => {
-        audioSource.buffer = decodedData;
-        audioSource.connect(audioContext.destination);
-        audioSource.start(0);
-      });
-
-      audioSource.onended = () => {
-        video.muted = false;
-        setIsSpeaking(false);
-      };
-    } catch (err) {
-      console.error("Error playing speech from server:", err);
-      video.muted = false;
-      setIsSpeaking(false);
+  // Function to handle text-to-speech when the "Speak" button is clicked
+  const handleTextToSpeech = useCallback(() => {
+    if (commentary.length === 0) {
+      alert('No commentary available for speech synthesis.');
+      return;
     }
-  };
 
-  const handleUserMessage = (message) => {
-    const userComment = {
-      timestamp: new Date().toISOString(),
-      text: message,
-      type: "user",
-    };
-    setCommentary((prevCommentary) => {
-      const newCommentary = [...prevCommentary, userComment];
-      fetchLatestAnalytics();
-      return newCommentary;
-    });
-  };
+    const lastCommentary = commentary[commentary.length - 1].text;
 
-  const TotalCommentariesChart = ({ commentaries }) => {
-    const data = commentaries.map((c) => ({
-      date: new Date(c.date).toLocaleDateString(),
-      count: c.count,
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance(lastCommentary);
+    synth.speak(utterance);
+  }, [commentary]);
+
+  // Chart components
+
+  const TotalCommentariesChart = useCallback(({ commentaries }) => (
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={commentaries}>
+        <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+        <XAxis dataKey="date" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+        <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+        <Tooltip
+          contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
+          labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+        />
+        <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
+        <Line
+          type="monotone"
+          dataKey="count"
+          stroke="#00FF00"
+          dot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  ), []);
+
+  const LatestLatenciesChart = useCallback(({ latencies = [] }) => {
+    const data = latencies.map((l) => ({
+      timestamp: new Date(l.timestamp).toLocaleString(),
+      latency: l.latency ?? 0,
     }));
 
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="count" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
-    );
-  };
-
-  const LatestLatenciesChart = ({ latencies = [] }) => {
-    const data = latencies
-      .map((c) => ({
-        timestamp: new Date(c.timestamp).toLocaleString(),
-        latency: c.latency,
-      }))
-      .reverse();
-
-    return (
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <Tooltip
+            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
+            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          />
+          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
           <Line
             type="monotone"
             dataKey="latency"
-            stroke="#8884d8"
+            stroke="#00FF00"
+            dot={false}
             isAnimationActive={false}
           />
         </LineChart>
       </ResponsiveContainer>
     );
-  };
+  }, []);
 
-  const LatestCommentariesChart = ({ commentaries = [] }) => {
-    const data = commentaries
-      .map((c) => ({
-        timestamp: new Date(c.timestamp).toLocaleString(),
-        length: c.commentary.length,
-      }))
-      .reverse();
-
-    return (
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="length"
-            stroke="#8884d8"
-            isAnimationActive={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    );
-  };
-
-  const ScoresOverTimeChart = ({ scoresData = [] }) => {
-    const data = scoresData.map((s) => ({
-      timestamp: new Date(s.timestamp).toLocaleString(),
-      warriorsScore: s.warriors_score,
-      cavaliersScore: s.cavaliers_score,
+  const LatestCommentariesChart = useCallback(({ commentaries = [] }) => {
+    const data = commentaries.map((c) => ({
+      timestamp: new Date(c.timestamp).toLocaleString(),
+      length: c.commentary?.length || c.text?.length || 0,
     }));
 
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
+          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <Tooltip
+            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
+            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          />
+          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
+          <Line
+            type="monotone"
+            dataKey="length"
+            stroke="#00FF00"
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  }, []);
+
+  const ScoresOverTimeChart = useCallback(({ scoresData = [] }) => {
+    const data = scoresData.map((s) => ({
+      timestamp: new Date(s.timestamp).toLocaleString(),
+      warriorsScore: s.warriors_score ?? 0,
+      cavaliersScore: s.cavaliers_score ?? 0,
+    }));
+
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <Tooltip
+            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
+            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          />
+          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
           <Line
             type="monotone"
             dataKey="warriorsScore"
-            stroke="#1D428A"
+            stroke="#00FFFF" // Neon blue for Warriors
             name="Warriors"
+            dot={false}
             isAnimationActive={false}
           />
           <Line
             type="monotone"
             dataKey="cavaliersScore"
-            stroke="#860038"
+            stroke="#FF3131" // Neon red for Cavaliers
             name="Cavaliers"
+            dot={false}
             isAnimationActive={false}
           />
         </LineChart>
       </ResponsiveContainer>
     );
-  };
+  }, []);
 
-  const WinProbabilityChart = ({ winProbabilityData = [] }) => {
+  const WinProbabilityChart = useCallback(({ winProbabilityData = [] }) => {
     const data = winProbabilityData.map((wp) => ({
       timestamp: new Date(wp.timestamp).toLocaleString(),
-      winProbability: wp.win_probability,
+      winProbability: wp.win_probability ?? 50,
     }));
 
     return (
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis domain={[0, 100]} />
-          <Tooltip />
-          <Legend />
+          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <YAxis domain={[0, 100]} stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
+          <Tooltip
+            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
+            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          />
+          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
           <Line
             type="monotone"
             dataKey="winProbability"
             stroke="#00FF00"
             name="Warriors Win Probability %"
+            dot={false}
             isAnimationActive={false}
           />
         </LineChart>
       </ResponsiveContainer>
     );
-  };
-
-  const ChartModal = ({ chart, onClose }) => {
-    if (!chart) return null;
-
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div
-          className="bg-gray-800 p-4 rounded-lg"
-          style={{ width: "80%", height: "80%" }}
-        >
-          <button
-            onClick={onClose}
-            className="absolute top-2 right-2 text-white"
-          >
-            Close
-          </button>
-          {chart}
-        </div>
-      </div>
-    );
-  };
+  }, []);
 
   return (
-    <div className="flex flex-col h-screen">
-      <div className="flex flex-grow h-1/2">
-        <div className="w-2/3 p-4">
-          <video
-            ref={videoRef}
-            src={videoSrc}
-            controls
-            crossOrigin="anonymous"
-            className="w-full h-full object-cover bg-black border border-gray-700"
-          />
-          {error && <p className="text-red-500 mt-2">{error}</p>}
-          {isAIWatching && (
-            <div className="absolute top-4 right-4 bg-gray-500 bg-opacity-50 text-white px-2 py-1 rounded animate-pulse">
-              AI is watching
-            </div>
-          )}
+    <div className="flex flex-col min-h-screen bg-black text-neon-green font-orbitron">
+      <div className="flex flex-grow">
+        <div className="w-2/3 p-4 flex flex-col">
+          <div className="video-container">
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              controls
+              crossOrigin="anonymous"
+              className="w-full h-auto object-contain"
+            />
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+            {isAIWatching && (
+              <div className="ai-watching">
+                AI is watching
+              </div>
+            )}
+          </div>
         </div>
-        <div className="w-1/3 p-4">
+        <div
+          className="w-1/3 p-4 flex flex-col"
+          style={{ maxHeight: '80vh' }}
+        >
           <CommentarySidebar
             commentary={commentary}
             showAIMessages={showAIMessages}
             onToggleAIMessages={() => setShowAIMessages(!showAIMessages)}
-            onGenerateCommentary={fetchCommentary}
+            onGenerateCommentary={handleTextToSpeech}
             isAIWatching={isAIWatching}
-            isSpeaking={isSpeaking}
-            onSendMessage={handleUserMessage}
+            onSendMessage={onSendMessage}
           />
         </div>
       </div>
-      <div className="flex-shrink-0 bg-black p-4">
+      <div className="bg-black p-4">
         <button
           onClick={() => setShowAnalytics(!showAnalytics)}
-          className="mb-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-200"
+          className="mb-4"
         >
-          {showAnalytics ? "Hide Analytics" : "Show Analytics"}
+          {showAnalytics ? 'Hide Analytics' : 'Show Analytics'}
         </button>
         {showAnalytics && (
-          <div className="overflow-x-auto">
-            <div className="mb-4">
-              <select
-                value={timeRange}
-                onChange={(e) => setTimeRange(e.target.value)}
-                className="w-full p-2 bg-gray-700 text-white rounded"
-              >
-                <option value="all">All Time</option>
-                <option value="30s">Last 30 Seconds</option>
-                <option value="1min">Last Minute</option>
-                <option value="5min">Last 5 Minutes</option>
-                <option value="10min">Last 10 Minutes</option>
-              </select>
+          <div className="analytics-container">
+            <div className="analytics-card">
+              <h3 className="text-xl font-semibold mb-2">Total Commentaries</h3>
+              <TotalCommentariesChart
+                commentaries={analyticsData?.commentariesOverTime || []}
+              />
             </div>
-            <div className="flex flex-wrap justify-between">
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Total Commentaries
-                  </h3>
-                  <TotalCommentariesChart
-                    commentaries={analyticsData?.commentariesOverTime || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <TotalCommentariesChart
-                          commentaries={
-                            analyticsData?.commentariesOverTime || []
-                          }
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Latest Latencies
-                  </h3>
-                  <LatestLatenciesChart
-                    latencies={analyticsData?.latestLatency || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <LatestLatenciesChart
-                          latencies={analyticsData?.latestLatency || []}
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Latest Commentaries
-                  </h3>
-                  <LatestCommentariesChart
-                    commentaries={analyticsData?.latestCommentaries || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <LatestCommentariesChart
-                          commentaries={analyticsData?.latestCommentaries || []}
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4 mr-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Scores Over Time
-                  </h3>
-                  <ScoresOverTimeChart
-                    scoresData={analyticsData?.scoresOverTime || []}
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <ScoresOverTimeChart
-                          scoresData={analyticsData?.scoresOverTime || []}
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
-              <Draggable>
-                <div
-                  className="bg-gray-800 p-4 rounded-lg cursor-move mb-4"
-                  style={{ width: "30%", height: "250px" }}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-neon-green">
-                    Warriors Win Probability
-                  </h3>
-                  <WinProbabilityChart
-                    winProbabilityData={
-                      analyticsData?.winProbabilityOverTime || []
-                    }
-                  />
-                  <button
-                    onClick={() =>
-                      setEnlargedChart(
-                        <WinProbabilityChart
-                          winProbabilityData={
-                            analyticsData?.winProbabilityOverTime || []
-                          }
-                        />,
-                      )
-                    }
-                    className="mt-2 bg-blue-500 text-white px-2 py-1 rounded"
-                  >
-                    Enlarge
-                  </button>
-                </div>
-              </Draggable>
+
+            <div className="analytics-card">
+              <h3 className="text-xl font-semibold mb-2">Latest Latencies</h3>
+              <LatestLatenciesChart
+                latencies={analyticsData?.latestLatency || []}
+              />
+            </div>
+
+            <div className="analytics-card">
+              <h3 className="text-xl font-semibold mb-2">Latest Commentaries</h3>
+              <LatestCommentariesChart
+                commentaries={analyticsData?.latestCommentaries || []}
+              />
+            </div>
+
+            <div className="analytics-card">
+              <h3 className="text-xl font-semibold mb-2">Scores Over Time</h3>
+              <ScoresOverTimeChart
+                scoresData={analyticsData?.scoresOverTime || []}
+              />
+            </div>
+
+            <div className="analytics-card">
+              <h3 className="text-xl font-semibold mb-2">Warriors Win Probability</h3>
+              <WinProbabilityChart
+                winProbabilityData={analyticsData?.winProbabilityOverTime || []}
+              />
+            </div>
+
+            {/* Placeholder for the 6th graph to complete the 3x2 grid */}
+            <div className="analytics-card flex items-center justify-center">
+              <p>Additional Graph Placeholder</p>
             </div>
           </div>
         )}
       </div>
-      <ChartModal
-        chart={enlargedChart}
-        onClose={() => setEnlargedChart(null)}
-      />
     </div>
   );
 }
