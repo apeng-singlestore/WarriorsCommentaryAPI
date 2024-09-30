@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       // Fetch commentaries over time
       const commentariesOverTime = await query(`
         SELECT DATE(timestamp) as date, COUNT(*) as count
-        FROM commentary_data
+        FROM commentary_table
         ${timeFilter}
         GROUP BY DATE(timestamp)
         ORDER BY date
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
       // Fetch the last 10 commentary entries
       const latestCommentaries = await query(`
         SELECT timestamp, commentary
-        FROM commentary_data
+        FROM commentary_table
         ${timeFilter}
         ORDER BY timestamp DESC
         LIMIT 10
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
 
       const latestLatency = await query(`
         SELECT timestamp, latency
-        FROM commentary_data
+        FROM commentary_table
         ${timeFilter}
         ORDER BY timestamp DESC
         LIMIT 10
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
       // Calculate total commentaries
       const totalCommentaries = await query(`
         SELECT COUNT(*) AS total
-        FROM commentary_data
+        FROM commentary_table
         ${timeFilter}
       `);
 
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
       // Fetch scores over time
       const scoresOverTime = await query(`
         SELECT timestamp, warriors_score, cavaliers_score
-        FROM commentary_data
+        FROM commentary_table
         ${timeFilter}
         ORDER BY timestamp
       `);
@@ -94,7 +94,7 @@ export default async function handler(req, res) {
       // Fetch win probability over time
       const winProbabilityOverTime = await query(`
         SELECT timestamp, win_probability
-        FROM commentary_data
+        FROM commentary_table
         ${timeFilter}
         ORDER BY timestamp
       `);
