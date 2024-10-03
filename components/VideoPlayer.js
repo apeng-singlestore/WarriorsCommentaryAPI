@@ -1,7 +1,7 @@
 // components/VideoPlayer.js
 
-import { useRef, useEffect, useState, useCallback } from 'react';
-import CommentarySidebar from './CommentarySidebar';
+import { useRef, useEffect, useState, useCallback } from "react";
+import CommentarySidebar from "./CommentarySidebar";
 import {
   LineChart,
   Line,
@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
+} from "recharts";
 
 export default function VideoPlayer({ videoSrc }) {
   const videoRef = useRef(null);
@@ -26,11 +26,11 @@ export default function VideoPlayer({ videoSrc }) {
 
   const fetchLatestAnalytics = useCallback(async () => {
     try {
-      const response = await fetch('/api/analytics');
+      const response = await fetch("/api/analytics");
       const data = await response.json();
       setAnalyticsData(data);
     } catch (error) {
-      console.error('Error fetching latest analytics:', error);
+      console.error("Error fetching latest analytics:", error);
     }
   }, []);
 
@@ -73,17 +73,17 @@ export default function VideoPlayer({ videoSrc }) {
         stopCommentaryInterval();
       };
 
-      video.addEventListener('play', handlePlay);
-      video.addEventListener('playing', handlePlay);
-      video.addEventListener('pause', handlePause);
-      video.addEventListener('ended', handlePause);
+      video.addEventListener("play", handlePlay);
+      video.addEventListener("playing", handlePlay);
+      video.addEventListener("pause", handlePause);
+      video.addEventListener("ended", handlePause);
 
       // Cleanup event listeners on component unmount
       return () => {
-        video.removeEventListener('play', handlePlay);
-        video.removeEventListener('playing', handlePlay);
-        video.removeEventListener('pause', handlePause);
-        video.removeEventListener('ended', handlePause);
+        video.removeEventListener("play", handlePlay);
+        video.removeEventListener("playing", handlePlay);
+        video.removeEventListener("pause", handlePause);
+        video.removeEventListener("ended", handlePause);
         stopCommentaryInterval();
       };
     }
@@ -92,19 +92,19 @@ export default function VideoPlayer({ videoSrc }) {
   const fetchCommentary = useCallback(async () => {
     try {
       setIsAIWatching(true);
-      const canvas = document.createElement('canvas');
+      const canvas = document.createElement("canvas");
       const video = videoRef.current;
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
       canvas
-        .getContext('2d')
+        .getContext("2d")
         .drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL('image/jpeg');
+      const imageData = canvas.toDataURL("image/jpeg");
 
-      const response = await fetch('/api/commentary', {
-        method: 'POST',
+      const response = await fetch("/api/commentary", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           imageData,
@@ -121,19 +121,19 @@ export default function VideoPlayer({ videoSrc }) {
           {
             timestamp: data.timestamp || new Date().toISOString(),
             text: data.text,
-            type: 'ai',
+            type: "ai",
           },
         ]);
       } else {
-        console.error('No commentary text received from API.');
-        setError('No commentary received. Please try again.');
+        console.error("No commentary text received from API.");
+        setError("No commentary received. Please try again.");
       }
 
       setIsAIWatching(false);
     } catch (error) {
-      console.error('Error generating commentary:', error);
+      console.error("Error generating commentary:", error);
       setError(
-        'Error generating commentary. Please check the console for details.'
+        "Error generating commentary. Please check the console for details.",
       );
       setIsAIWatching(false);
     }
@@ -146,7 +146,7 @@ export default function VideoPlayer({ videoSrc }) {
       {
         timestamp: new Date().toISOString(),
         text: message,
-        type: 'user',
+        type: "user",
       },
     ]);
   }, []);
@@ -154,7 +154,7 @@ export default function VideoPlayer({ videoSrc }) {
   // Function to handle text-to-speech when the "Speak" button is clicked
   const handleTextToSpeech = useCallback(() => {
     if (commentary.length === 0) {
-      alert('No commentary available for speech synthesis.');
+      alert("No commentary available for speech synthesis.");
       return;
     }
 
@@ -167,28 +167,13 @@ export default function VideoPlayer({ videoSrc }) {
 
   // Chart components
 
-  const TotalCommentariesChart = useCallback(({ commentaries }) => (
-    <ResponsiveContainer width="100%" height="100%">
-      <LineChart data={commentaries}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-        <XAxis dataKey="date" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-        <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-        <Tooltip
-          contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
-          labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
-          itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
-        />
-        <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
-        <Line
-          type="monotone"
-          dataKey="count"
-          stroke="#00FF00"
-          dot={false}
-          isAnimationActive={false}
-        />
-      </LineChart>
-    </ResponsiveContainer>
-  ), []);
+  const TotalCommentariesChart = useCallback(({ commentaries }) => {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-9xl font-bold text-neon-green">{commentaries}</div>
+      </div>
+    );
+  }, []);
 
   const LatestLatenciesChart = useCallback(({ latencies = [] }) => {
     const data = latencies.map((l) => ({
@@ -200,14 +185,24 @@ export default function VideoPlayer({ videoSrc }) {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <Tooltip
-            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
-            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
-            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          <XAxis
+            dataKey="timestamp"
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
           />
-          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
+          <YAxis
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#000000",
+              borderColor: "#00FF00",
+            }}
+            labelStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+            itemStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+          />
+          <Legend wrapperStyle={{ fontFamily: "Orbitron", color: "#00FF00" }} />
           <Line
             type="monotone"
             dataKey="latency"
@@ -230,14 +225,24 @@ export default function VideoPlayer({ videoSrc }) {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <Tooltip
-            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
-            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
-            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          <XAxis
+            dataKey="timestamp"
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
           />
-          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
+          <YAxis
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#000000",
+              borderColor: "#00FF00",
+            }}
+            labelStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+            itemStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+          />
+          <Legend wrapperStyle={{ fontFamily: "Orbitron", color: "#00FF00" }} />
           <Line
             type="monotone"
             dataKey="length"
@@ -261,14 +266,24 @@ export default function VideoPlayer({ videoSrc }) {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <YAxis stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <Tooltip
-            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
-            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
-            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          <XAxis
+            dataKey="timestamp"
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
           />
-          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
+          <YAxis
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#000000",
+              borderColor: "#00FF00",
+            }}
+            labelStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+            itemStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+          />
+          <Legend wrapperStyle={{ fontFamily: "Orbitron", color: "#00FF00" }} />
           <Line
             type="monotone"
             dataKey="warriorsScore"
@@ -290,7 +305,7 @@ export default function VideoPlayer({ videoSrc }) {
     );
   }, []);
 
-  const WinProbabilityChart = useCallback(({ winProbabilityData = [] }) => {
+  const GSWinProbabilityChart = useCallback(({ winProbabilityData = [] }) => {
     const data = winProbabilityData.map((wp) => ({
       timestamp: new Date(wp.timestamp).toLocaleString(),
       winProbability: wp.win_probability ?? 50,
@@ -300,19 +315,72 @@ export default function VideoPlayer({ videoSrc }) {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-          <XAxis dataKey="timestamp" stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <YAxis domain={[0, 100]} stroke="#00FF00" tick={{ fontFamily: 'Orbitron', fill: '#00FF00' }} />
-          <Tooltip
-            contentStyle={{ backgroundColor: '#000000', borderColor: '#00FF00' }}
-            labelStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
-            itemStyle={{ color: '#00FF00', fontFamily: 'Orbitron' }}
+          <XAxis
+            dataKey="timestamp"
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
           />
-          <Legend wrapperStyle={{ fontFamily: 'Orbitron', color: '#00FF00' }} />
+          <YAxis
+            domain={[0, 100]}
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#000000",
+              borderColor: "#00FF00",
+            }}
+            labelStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+            itemStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+          />
+          <Legend wrapperStyle={{ fontFamily: "Orbitron", color: "#00FF00" }} />
           <Line
             type="monotone"
             dataKey="winProbability"
             stroke="#00FF00"
             name="Warriors Win Probability %"
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  }, []);
+
+  const CLEWinProbabilityChart = useCallback(({ winProbabilityData = [] }) => {
+    const data = winProbabilityData.map((wp) => ({
+      timestamp: new Date(wp.timestamp).toLocaleString(),
+      winProbability: 100 - wp.win_probability ?? 50,
+    }));
+
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+          <XAxis
+            dataKey="timestamp"
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
+          />
+          <YAxis
+            domain={[0, 100]}
+            stroke="#00FF00"
+            tick={{ fontFamily: "Orbitron", fill: "#00FF00" }}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#000000",
+              borderColor: "#00FF00",
+            }}
+            labelStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+            itemStyle={{ color: "#00FF00", fontFamily: "Orbitron" }}
+          />
+          <Legend wrapperStyle={{ fontFamily: "Orbitron", color: "#00FF00" }} />
+          <Line
+            type="monotone"
+            dataKey="winProbability"
+            stroke="#00FF00"
+            name="Cavaliers Win Probability %"
             dot={false}
             isAnimationActive={false}
           />
@@ -334,17 +402,10 @@ export default function VideoPlayer({ videoSrc }) {
               className="w-full h-auto object-contain"
             />
             {error && <p className="text-red-500 mt-2">{error}</p>}
-            {isAIWatching && (
-              <div className="ai-watching">
-                AI is watching
-              </div>
-            )}
+            {isAIWatching && <div className="ai-watching">AI is watching</div>}
           </div>
         </div>
-        <div
-          className="w-1/3 p-4 flex flex-col"
-          style={{ maxHeight: '80vh' }}
-        >
+        <div className="w-1/3 p-4 flex flex-col" style={{ maxHeight: "80vh" }}>
           <CommentarySidebar
             commentary={commentary}
             showAIMessages={showAIMessages}
@@ -360,14 +421,14 @@ export default function VideoPlayer({ videoSrc }) {
           onClick={() => setShowAnalytics(!showAnalytics)}
           className="mb-4"
         >
-          {showAnalytics ? 'Hide Analytics' : 'Show Analytics'}
+          {showAnalytics ? "Hide Analytics" : "Show Analytics"}
         </button>
         {showAnalytics && (
           <div className="analytics-container">
             <div className="analytics-card">
               <h3 className="text-xl font-semibold mb-2">Total Commentaries</h3>
               <TotalCommentariesChart
-                commentaries={analyticsData?.commentariesOverTime || []}
+                commentaries={analyticsData?.totalCommentaries || 0}
               />
             </div>
 
@@ -379,7 +440,9 @@ export default function VideoPlayer({ videoSrc }) {
             </div>
 
             <div className="analytics-card">
-              <h3 className="text-xl font-semibold mb-2">Latest Commentaries</h3>
+              <h3 className="text-xl font-semibold mb-2">
+                Latest Commentaries
+              </h3>
               <LatestCommentariesChart
                 commentaries={analyticsData?.latestCommentaries || []}
               />
@@ -393,15 +456,21 @@ export default function VideoPlayer({ videoSrc }) {
             </div>
 
             <div className="analytics-card">
-              <h3 className="text-xl font-semibold mb-2">Warriors Win Probability</h3>
-              <WinProbabilityChart
+              <h3 className="text-xl font-semibold mb-2">
+                Warriors Win Probability
+              </h3>
+              <GSWinProbabilityChart
                 winProbabilityData={analyticsData?.winProbabilityOverTime || []}
               />
             </div>
 
-            {/* Placeholder for the 6th graph to complete the 3x2 grid */}
-            <div className="analytics-card flex items-center justify-center">
-              <p>Additional Graph Placeholder</p>
+            <div className="analytics-card">
+              <h3 className="text-xl font-semibold mb-2">
+                Cavaliers Win Probability
+              </h3>
+              <CLEWinProbabilityChart
+                winProbabilityData={analyticsData?.winProbabilityOverTime || []}
+              />
             </div>
           </div>
         )}
