@@ -23,16 +23,16 @@ npm install
 ```
 
 # SingleStore Connection Details
-DATABASE_HOST=your-singlestore-host
-DATABASE_USERNAME=your-singlestore-username
-DATABASE_PASSWORD=your-singlestore-password
-DATABASE_NAME=your-singlestore-database-name
+- DATABASE_HOST=your-singlestore-host
+- DATABASE_USERNAME=your-singlestore-username
+- DATABASE_PASSWORD=your-singlestore-password
+- DATABASE_NAME=your-singlestore-database-name
 
 # Groq API Key
-GROQ_API_KEY=your-groq-api-key
+- GROQ_API_KEY=your-groq-api-key
 
 # OpenAI API Key
-OPENAI_API_KEY=your-openai-api-key
+- OPENAI_API_KEY=your-openai-api-key
 
 # Running the project
 
