@@ -22,9 +22,10 @@ Create a .env.local file in the project's root directory and add your credential
 env
 Copy code
 # SingleStore Connection Details
-SINGLESTORE_HOST=your-singlestore-host
-SINGLESTORE_USERNAME=your-singlestore-username
-SINGLESTORE_PASSWORD=your-singlestore-password
+DATABASE_HOST=your-singlestore-host
+DATABASE_USERNAME=your-singlestore-username
+DATABASE_PASSWORD=your-singlestore-password
+DATABASE_NAME=your-singlestore-db-name
 
 # Groq API Key
 GROQ_API_KEY=your-groq-api-key
